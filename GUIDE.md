@@ -20,8 +20,8 @@
   - **Storage locale**: MMKV                                                                          
   - **Push Notifications**: Expo Notifications
   - **Ads**: Google AdMob (react-native-google-mobile-ads)                                            
-  - **Backend**: Supabase (auth, database, edge functions)                                          
-  - **Contenuti oroscopo**: generati in batch con AI (Claude API), salvati in DB                      
+  - **Backend**: Firebase (Auth, Firestore, Cloud Functions)
+  - **Contenuti oroscopo**: generati in batch con AI (Google Gemini API, free tier), salvati in Firestore                      
   - **Analytics**: PostHog (free tier)
   - **In-App Purchases**: RevenueCat                                                                  
   - **i18n**: react-i18next + expo-localization                                                     
@@ -37,7 +37,7 @@
   └── es.json    ← fase 2
                                                                                                       
   Tutti i contenuti generati con AI (oroscopi, interpretazioni tarocchi) vengono prodotti
-  per lingua e salvati separatamente nel DB.                                                          
+  per lingua e salvati separatamente in Firestore.                                                          
   La lingua dell'app segue la lingua del dispositivo, con override manuale nelle impostazioni.      
                                                                                                       
   ## Design                                                                                         
@@ -69,7 +69,7 @@
   - Indicatori visivi (stelle 1-5 per amore, lavoro, fortuna): sbloccabili con rewarded video ad      
   - Numero fortunato del giorno                                                                       
   - Colore del giorno                                                                                 
-  - Affinità del giorno (segno più compatibile oggi): solo premium                                    
+  - Affinità del giorno (segno più compatibile oggi): rewarded ad oppure premium                                    
                                                                                                       
   ### 3. Tarocchi — Pesca la carta
   - L'utente vede un mazzo di carte a faccia in giù, disposte a ventaglio                             
@@ -119,7 +119,7 @@
   | Tarocchi — lettura amore | Rewarded ad |                                                        
   | Ruota della fortuna | 1 spin/giorno, extra con rewarded ad |                                      
   | Gratta e scopri | 1/giorno, extra con rewarded ad |                                               
-  | Affinità di coppia dettagliata | No |
+  | Affinità di coppia dettagliata | Rewarded ad |
   | Storico letture | 7 giorni |                                                                      
   | Temi visivi carte | Default |                                                                   
   | Ads | Banner + interstitial |                                                                     
@@ -132,7 +132,7 @@
   | Tarocchi | Tutte le letture, illimitate |                                                         
   | Ruota della fortuna | Spin illimitati |
   | Gratta e scopri | Illimitati |                                                                    
-  | Affinità di coppia dettagliata | Sì |                                                           
+  | Affinità di coppia dettagliata | Sì (senza ad) |                                                           
   | Storico letture | 30 giorni |                                                                     
   | Temi visivi carte | Esclusivi |                                                                   
   | Ads | Zero |
@@ -146,7 +146,7 @@
   ## Contenuti                                                                                        
                                                                                                     
   ### Oroscopo                                                                                        
-  - Generati settimanalmente in batch via AI (Claude API)
+  - Generati settimanalmente in batch via AI (Google Gemini API, free tier)
   - 12 segni × 7 giorni × 4 sezioni (generale, amore, lavoro, fortuna) = 336 testi/settimana          
   - Ogni sezione: ~50-80 parole                                                                       
   - Tono: positivo ma non banale, specifico, mai catastrofico                                         
@@ -177,7 +177,7 @@
   - Setup progetto Expo + navigazione + i18n
   - Onboarding flow                                                                                   
   - Design system (colori, tipografia, componenti base)
-  - Struttura dati e backend Supabase                                                                 
+  - Struttura dati e backend Firebase                                                                 
   - File di traduzione italiano                                                                       
    
   ### Fase 2 — Core Features (settimane 3-5)                                                          
