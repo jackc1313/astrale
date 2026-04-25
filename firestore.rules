@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /horoscopes/{date}/signs/{sign} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /tarot_interpretations/{cardId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /daily_content/{date} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}
