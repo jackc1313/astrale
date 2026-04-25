@@ -60,7 +60,7 @@ functions/
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /horoscopes/{date}/{sign} {
+    match /horoscopes/{date}/signs/{sign} {
       allow read: if true;
       allow write: if false;
     }
