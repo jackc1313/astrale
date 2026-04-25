@@ -1,0 +1,1 @@
+export { useHoroscope } from "./useHoroscope";
