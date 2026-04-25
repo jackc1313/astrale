@@ -1,0 +1,51 @@
+import { StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+
+import { ScreenContainer, Title, Body, Button, ProgressBar } from '@shared/components';
+import { colors, spacing } from '@shared/theme';
+import { ZodiacGrid } from '@features/onboarding/components';
+import { useOnboardingContext } from './_layout';
+
+export default function AscendantScreen() {
+  const { t } = useTranslation();
+  const router = useRouter();
+  const { ascendant, setAscendant } = useOnboardingContext();
+
+  const handleSkip = () => {
+    setAscendant(null);
+    router.push('/(onboarding)/interests');
+  };
+
+  return (
+    <ScreenContainer>
+      <View style={styles.container}>
+        <ProgressBar steps={4} currentStep={2} />
+        <View style={styles.header}>
+          <Title>{t('onboarding.ascendant.title')}</Title>
+          <Body style={styles.subtitle}>{t('onboarding.ascendant.subtitle')}</Body>
+        </View>
+        <Body style={styles.description}>{t('onboarding.ascendant.description')}</Body>
+        <ZodiacGrid selected={ascendant} onSelect={setAscendant} />
+        <Body onPress={handleSkip} style={styles.skipLink}>
+          {t('onboarding.ascendant.skip')}
+        </Body>
+        <View style={styles.footer}>
+          <Button
+            title={t('common.continue')}
+            onPress={() => router.push('/(onboarding)/interests')}
+          />
+        </View>
+      </View>
+    </ScreenContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: spacing.xl },
+  header: { marginTop: spacing['3xl'], gap: spacing.sm },
+  subtitle: { opacity: 0.6, fontSize: 11 },
+  description: { marginTop: spacing.lg, marginBottom: spacing.xl, opacity: 0.7, fontSize: 12 },
+  skipLink: { textAlign: 'center', color: colors.gold, fontSize: 11, marginTop: spacing.md, opacity: 0.7 },
+  footer: { marginTop: 'auto' },
+});
