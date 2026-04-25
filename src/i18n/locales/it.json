@@ -1,0 +1,63 @@
+{
+  "common": {
+    "continue": "Continua",
+    "skip": "Forse dopo",
+    "back": "Indietro"
+  },
+  "zodiac": {
+    "aries": "Ariete",
+    "taurus": "Toro",
+    "gemini": "Gemelli",
+    "cancer": "Cancro",
+    "leo": "Leone",
+    "virgo": "Vergine",
+    "libra": "Bilancia",
+    "scorpio": "Scorpione",
+    "sagittarius": "Sagittario",
+    "capricorn": "Capricorno",
+    "aquarius": "Acquario",
+    "pisces": "Pesci"
+  },
+  "onboarding": {
+    "sign": {
+      "title": "Qual e' il tuo segno?",
+      "subtitle": "Inserisci la tua data di nascita",
+      "changeSign": "Non e' il tuo segno? Cambialo"
+    },
+    "ascendant": {
+      "title": "Il tuo ascendente",
+      "subtitle": "Opzionale — personalizza la tua esperienza",
+      "skip": "Non conosco il mio ascendente",
+      "description": "L'ascendente rappresenta la tua immagine esteriore e il modo in cui ti presenti al mondo."
+    },
+    "interests": {
+      "title": "Cosa ti interessa?",
+      "subtitle": "Seleziona almeno uno",
+      "love": "Amore",
+      "loveDesc": "Relazioni e affinita'",
+      "work": "Lavoro",
+      "workDesc": "Carriera e opportunita'",
+      "health": "Salute",
+      "healthDesc": "Benessere e energia",
+      "luck": "Fortuna",
+      "luckDesc": "Numeri e sorprese"
+    },
+    "notifications": {
+      "title": "Non perderti\nl'oroscopo di domani",
+      "subtitle": "Ti avviseremo ogni mattina quando il tuo oroscopo e' pronto",
+      "enable": "Attiva notifiche",
+      "skip": "Forse dopo"
+    }
+  },
+  "tabs": {
+    "home": "Home",
+    "tarot": "Tarocchi",
+    "discover": "Scopri"
+  },
+  "home": {
+    "greeting": "Buongiorno, {{sign}}"
+  },
+  "profile": {
+    "title": "Profilo"
+  }
+}
