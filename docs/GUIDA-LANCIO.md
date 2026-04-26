@@ -6,23 +6,58 @@ Guida step-by-step per testare, ottimizzare e pubblicare l'app su App Store e Pl
 
 ## Indice
 
-1. [Setup Firebase](#1-setup-firebase)
-2. [Popolare Firestore con i contenuti](#2-popolare-firestore-con-i-contenuti)
-3. [Testing locale](#3-testing-locale)
-4. [Performance e ottimizzazione](#4-performance-e-ottimizzazione)
-5. [Creare l'icona dell'app](#5-creare-licona-dellapp)
-6. [Screenshot per gli store](#6-screenshot-per-gli-store)
-7. [Account sviluppatore](#7-account-sviluppatore)
-8. [Configurare AdMob](#8-configurare-admob)
-9. [Configurare RevenueCat](#9-configurare-revenuecat)
-10. [Build di produzione](#10-build-di-produzione)
-11. [Pubblicazione su App Store (iOS)](#11-pubblicazione-su-app-store-ios)
-12. [Pubblicazione su Play Store (Android)](#12-pubblicazione-su-play-store-android)
-13. [Post-lancio](#13-post-lancio)
+1. [Pulizia progetto](#1-pulizia-progetto)
+2. [Setup Firebase](#2-setup-firebase)
+3. [Popolare Firestore con i contenuti](#3-popolare-firestore-con-i-contenuti)
+4. [Testing locale](#4-testing-locale)
+5. [Performance e ottimizzazione](#5-performance-e-ottimizzazione)
+6. [Creare l'icona dell'app](#6-creare-licona-dellapp)
+7. [Screenshot per gli store](#7-screenshot-per-gli-store)
+8. [Account sviluppatore](#8-account-sviluppatore)
+9. [Configurare AdMob](#9-configurare-admob)
+10. [Configurare RevenueCat](#10-configurare-revenuecat)
+11. [Build di produzione](#11-build-di-produzione)
+12. [Pubblicazione su App Store (iOS)](#12-pubblicazione-su-app-store-ios)
+13. [Pubblicazione su Play Store (Android)](#13-pubblicazione-su-play-store-android)
+14. [Post-lancio](#14-post-lancio)
 
 ---
 
-## 1. Setup Firebase
+## 1. Pulizia progetto
+
+Prima del lancio, rimuovi i file di sviluppo che non servono in produzione. Questi file NON finiscono nel bundle dell'app (Expo include solo cio' che e' importato dal codice), ma e' buona pratica avere un repo pulito.
+
+### 1.1 Rimuovere gli artifact di sviluppo
+
+```bash
+# Specs di design e piani di implementazione (artifact del brainstorming)
+rm -rf docs/superpowers/
+
+# Artifact del visual companion (se presenti, gia' in .gitignore)
+rm -rf .superpowers/
+```
+
+### 1.2 File da TENERE
+
+| File | Motivo |
+|------|--------|
+| `docs/GUIDA-LANCIO.md` | Questa guida — ti serve |
+| `GUIDE.md` | Documentazione del progetto |
+| `__tests__/` | Test — utili per manutenzione futura |
+| `functions/` | Cloud Functions — servono per il deploy |
+| `.env.example` | Template env vars per riferimento |
+
+### 1.3 Committare la pulizia
+
+```bash
+git add -A
+git commit -m "chore: remove development artifacts before launch"
+git push
+```
+
+---
+
+## 2. Setup Firebase
 
 ### 1.1 Creare il progetto
 
@@ -101,7 +136,7 @@ firebase deploy --only functions
 
 ---
 
-## 2. Popolare Firestore con i contenuti
+## 3. Popolare Firestore con i contenuti
 
 ### 2.1 Generare gli oroscopi
 
@@ -145,7 +180,7 @@ Vai su Firebase Console → Firestore Database. Dovresti vedere:
 
 ---
 
-## 3. Testing locale
+## 4. Testing locale
 
 ### 3.1 iOS — Simulatore Xcode
 
@@ -208,7 +243,7 @@ L'app sul telefono si connette al tuo Mac via WiFi (stessa rete).
 
 ---
 
-## 4. Performance e ottimizzazione
+## 5. Performance e ottimizzazione
 
 ### 4.1 Rimuovere log di debug
 
@@ -236,7 +271,7 @@ L'app usa gia' uno splash screen con sfondo `#0d0d0d`. Per aggiungere un logo:
 
 ---
 
-## 5. Creare l'icona dell'app
+## 6. Creare l'icona dell'app
 
 Serve un'immagine PNG **1024x1024px** senza trasparenza.
 
@@ -259,7 +294,7 @@ Per Android, serve anche l'adaptive icon:
 
 ---
 
-## 6. Screenshot per gli store
+## 7. Screenshot per gli store
 
 ### 6.1 Dimensioni richieste
 
@@ -301,7 +336,7 @@ Per screenshot piu' professionali, puoi aggiungere testo sopra/sotto il mockup d
 
 ---
 
-## 7. Account sviluppatore
+## 8. Account sviluppatore
 
 ### 7.1 Apple Developer Program
 
@@ -321,7 +356,7 @@ Per screenshot piu' professionali, puoi aggiungere testo sopra/sotto il mockup d
 
 ---
 
-## 8. Configurare AdMob
+## 9. Configurare AdMob
 
 ### 8.1 Creare account AdMob
 
@@ -364,7 +399,7 @@ unitId={process.env.EXPO_PUBLIC_ADMOB_BANNER_ID ?? TestIds.ADAPTIVE_BANNER}
 
 ---
 
-## 9. Configurare RevenueCat
+## 10. Configurare RevenueCat
 
 ### 9.1 Creare account RevenueCat
 
@@ -413,7 +448,7 @@ EXPO_PUBLIC_REVENUECAT_API_KEY=la_tua_api_key_pubblica
 
 ---
 
-## 10. Build di produzione
+## 11. Build di produzione
 
 ### 10.1 Configurare EAS per produzione
 
@@ -469,7 +504,7 @@ EAS genera un file `.aab` (Android App Bundle). Il processo richiede 10-15 minut
 
 ---
 
-## 11. Pubblicazione su App Store (iOS)
+## 12. Pubblicazione su App Store (iOS)
 
 ### 11.1 App Store Connect
 
@@ -545,7 +580,7 @@ La review Apple richiede tipicamente 24-48 ore.
 
 ---
 
-## 12. Pubblicazione su Play Store (Android)
+## 13. Pubblicazione su Play Store (Android)
 
 ### 12.1 Google Play Console
 
@@ -608,7 +643,7 @@ La review Google richiede tipicamente poche ore — a volte minuti.
 
 ---
 
-## 13. Post-lancio
+## 14. Post-lancio
 
 ### 13.1 Monitoraggio
 
@@ -641,6 +676,7 @@ firebase functions:shell
 
 ## Checklist finale pre-lancio
 
+- [ ] Artifact di sviluppo rimossi (`docs/superpowers/`, `.superpowers/`)
 - [ ] Progetto Firebase creato e configurato
 - [ ] Cloud Functions deployate e funzionanti
 - [ ] Firestore popolato (oroscopi, tarocchi, daily content)
