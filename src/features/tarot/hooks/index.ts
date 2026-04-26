@@ -1,0 +1,1 @@
+export { useTarot } from "./useTarot";
