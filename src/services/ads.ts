@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import {
   RewardedAd,
   RewardedAdEventType,
+  InterstitialAd,
+  AdEventType,
   TestIds,
 } from "react-native-google-mobile-ads";
 
@@ -65,4 +67,51 @@ export const useRewardedAd = () => {
   };
 
   return { isLoaded, showAd };
+};
+
+const INTERSTITIAL_AD_UNIT_ID = TestIds.INTERSTITIAL;
+
+export const useInterstitialAd = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [adInstance, setAdInstance] = useState<InterstitialAd | null>(null);
+
+  const loadAd = useCallback(() => {
+    const ad = InterstitialAd.createForAdRequest(INTERSTITIAL_AD_UNIT_ID);
+
+    const unsubLoaded = ad.addAdEventListener(AdEventType.LOADED, () => {
+      setIsLoaded(true);
+    });
+
+    const unsubClosed = ad.addAdEventListener(AdEventType.CLOSED, () => {
+      setIsLoaded(false);
+      loadAd();
+    });
+
+    ad.load();
+    setAdInstance(ad);
+
+    return () => {
+      unsubLoaded();
+      unsubClosed();
+    };
+  }, []);
+
+  useEffect(() => {
+    const cleanup = loadAd();
+    return cleanup;
+  }, [loadAd]);
+
+  const maybeShowInterstitial = useCallback(
+    async (interactionsCount: number, isPremium: boolean): Promise<void> => {
+      if (isPremium || interactionsCount < 2 || !adInstance || !isLoaded) return;
+      try {
+        await adInstance.show();
+      } catch {
+        // Ad not ready
+      }
+    },
+    [adInstance, isLoaded]
+  );
+
+  return { maybeShowInterstitial };
 };
