@@ -58,7 +58,36 @@
     "greeting": "Buongiorno, {{sign}}"
   },
   "profile": {
-    "title": "Profilo"
+    "title": "Profilo",
+    "streak": "{{count}} giorni consecutivi",
+    "longestStreak": "Record: {{count}} giorni",
+    "badges": "Badge",
+    "history": "Storico letture",
+    "notifications": "Notifiche",
+    "morning": "Oroscopo del mattino",
+    "evening": "Carta della sera",
+    "streakAlert": "Avviso streak",
+    "premium": "Passa ad Astrale Plus"
+  },
+  "badges": {
+    "7_days": "7 Giorni",
+    "30_days": "30 Giorni",
+    "100_days": "100 Giorni",
+    "all_arcana": "Tutti gli Arcani",
+    "progress": "{{current}}/{{total}}"
+  },
+  "notifications": {
+    "morning": "Il tuo oroscopo di oggi e' pronto",
+    "evening": "Hai pescato la tua carta oggi?",
+    "streak": "Non perdere la tua serie di {{count}} giorni!"
+  },
+  "history": {
+    "horoscope": "Oroscopo",
+    "tarot": "Tarocchi",
+    "wheel": "Ruota",
+    "scratch": "Gratta",
+    "noEntries": "Nessuna lettura per questo giorno",
+    "limitFree": "Storico limitato a 7 giorni"
   },
   "horoscope": {
     "general": "Generale",
