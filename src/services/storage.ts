@@ -1,6 +1,8 @@
 import { createMMKV } from 'react-native-mmkv';
 
 import type { DailyUsage, UserProfile, UserStreak } from '@features/onboarding/types';
+import type { ReadingHistoryDay, NotificationSettings } from '@features/profile/types';
+import { DEFAULT_NOTIFICATION_SETTINGS } from '@features/profile/types';
 
 export const storage = createMMKV();
 
@@ -9,6 +11,8 @@ const KEYS = {
   USER_STREAK: 'user.streak',
   DAILY_USAGE: 'daily.usage',
   COLLECTED_CARDS: 'collected.cards',
+  READING_HISTORY: 'reading.history',
+  NOTIFICATION_SETTINGS: 'notification.settings',
 } as const;
 
 const getObject = <T>(key: string): T | null => {
@@ -52,5 +56,37 @@ export const storageService = {
       setObject(KEYS.COLLECTED_CARDS, [...cards, cardId]);
     }
   },
+  getReadingHistory: (): ReadingHistoryDay[] => {
+    return getObject<ReadingHistoryDay[]>(KEYS.READING_HISTORY) ?? [];
+  },
+
+  addReadingEntry: (type: ReadingHistoryDay['entries'][0]['type'], summary: string): void => {
+    const history = storageService.getReadingHistory();
+    const today = new Date().toISOString().split('T')[0];
+    const entry = { type, summary, timestamp: new Date().toISOString() };
+
+    const dayIndex = history.findIndex((d) => d.date === today);
+    if (dayIndex >= 0) {
+      history[dayIndex].entries.push(entry);
+    } else {
+      history.push({ date: today, entries: [entry] });
+    }
+
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 30);
+    const cutoffStr = cutoff.toISOString().split('T')[0];
+    const trimmed = history.filter((d) => d.date >= cutoffStr);
+
+    setObject(KEYS.READING_HISTORY, trimmed);
+  },
+
+  getNotificationSettings: (): NotificationSettings => {
+    return getObject<NotificationSettings>(KEYS.NOTIFICATION_SETTINGS) ?? DEFAULT_NOTIFICATION_SETTINGS;
+  },
+
+  setNotificationSettings: (settings: NotificationSettings): void => {
+    setObject(KEYS.NOTIFICATION_SETTINGS, settings);
+  },
+
   clearAll: (): void => { storage.clearAll(); },
 } as const;
