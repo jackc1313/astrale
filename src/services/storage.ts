@@ -13,6 +13,7 @@ const KEYS = {
   COLLECTED_CARDS: 'collected.cards',
   READING_HISTORY: 'reading.history',
   NOTIFICATION_SETTINGS: 'notification.settings',
+  IS_PREMIUM: 'user.isPremium',
 } as const;
 
 const getObject = <T>(key: string): T | null => {
@@ -87,6 +88,14 @@ export const storageService = {
 
   setNotificationSettings: (settings: NotificationSettings): void => {
     setObject(KEYS.NOTIFICATION_SETTINGS, settings);
+  },
+
+  getIsPremium: (): boolean => {
+    return storage.getBoolean(KEYS.IS_PREMIUM) ?? false;
+  },
+
+  setIsPremium: (value: boolean): void => {
+    storage.set(KEYS.IS_PREMIUM, value);
   },
 
   clearAll: (): void => { storage.clearAll(); },
