@@ -25,4 +25,5 @@ export type DailyUsage = {
   wheelSpun: boolean;
   scratchUsed: boolean;
   rewardedAdsWatched: number;
+  interactionsCount: number;
 };

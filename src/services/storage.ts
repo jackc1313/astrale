@@ -44,6 +44,7 @@ export const storageService = {
     return {
       date, freeHoroscopeRead: false, tarotCardDrawn: false,
       wheelSpun: false, scratchUsed: false, rewardedAdsWatched: 0,
+      interactionsCount: 0,
     };
   },
   setDailyUsage: (usage: DailyUsage): void => setObject(KEYS.DAILY_USAGE, usage),

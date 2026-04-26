@@ -189,6 +189,23 @@
       "the_world_reversed": "Incompletezza, mancanza di chiusura, ritardo"
     }
   },
+  "premium": {
+    "title": "Astrale Plus",
+    "subtitle": "Sblocca l'esperienza completa",
+    "benefit1": "Oroscopo completo senza pubblicita'",
+    "benefit2": "Tarocchi illimitati, tutte le modalita'",
+    "benefit3": "Ruota e Gratta illimitati",
+    "benefit4": "Storico letture 30 giorni",
+    "benefit5": "Zero pubblicita'",
+    "monthly": "Mensile",
+    "monthlyPrice": "2,99 EUR/mese",
+    "yearly": "Annuale",
+    "yearlyPrice": "19,99 EUR/anno",
+    "yearlySave": "Risparmia 40%",
+    "subscribe": "Abbonati",
+    "restore": "Ripristina acquisti",
+    "close": "Non ora"
+  },
   "discover": {
     "wheel": {
       "title": "Ruota della Fortuna",
