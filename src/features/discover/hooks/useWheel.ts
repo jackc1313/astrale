@@ -64,6 +64,7 @@ export const useWheel = () => {
     const index = Math.floor(normalizedAngle / segmentAngle);
     const selected = items[index % items.length];
     setResult(selected);
+    storageService.addReadingEntry('wheel', selected.fullText.slice(0, 80));
     setIsSpinning(false);
 
     if (!hasSpunToday) {

@@ -105,6 +105,7 @@ export const useTarot = () => {
     });
 
     fetchInterpretation(drawn[0].card.id);
+    storageService.addReadingEntry('tarot', drawn[0].card.id);
   }, [mode, alreadyDrawnToday]);
 
   const reset = () => {

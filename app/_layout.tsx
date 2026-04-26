@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { storageService } from '@services/storage';
+import { useStreak } from '@features/profile/hooks';
 import '@i18n/index';
 
 SplashScreen.preventAutoHideAsync();
@@ -14,6 +15,7 @@ export default function RootLayout() {
   const segments = useSegments();
   const [isReady, setIsReady] = useState(false);
   const [onboardingDone, setOnboardingDone] = useState(false);
+  useStreak();
 
   const [fontsLoaded] = useFonts({
     'PlayfairDisplay-Bold': require('../assets/fonts/PlayfairDisplay-Bold.ttf'),

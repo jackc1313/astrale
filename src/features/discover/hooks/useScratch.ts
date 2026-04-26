@@ -52,6 +52,8 @@ export const useScratch = () => {
 
   const reveal = () => {
     setIsRevealed(true);
+    const content = contents[selectedIndex ?? 0] ?? '';
+    storageService.addReadingEntry('scratch', content.slice(0, 80));
     if (!hasScratchedToday) {
       setHasScratchedToday(true);
       const usage = storageService.getDailyUsage(todayStr);

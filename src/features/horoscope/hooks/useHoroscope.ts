@@ -44,6 +44,7 @@ export const useHoroscope = () => {
           const data = snap.data() as Horoscope;
           storage.set(cacheKey, JSON.stringify(data));
           setHoroscope(data);
+          storageService.addReadingEntry('horoscope', data.general.slice(0, 80));
         } else {
           setError("Horoscope not available");
         }
