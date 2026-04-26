@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { storageService } from '@services/storage';
+import { initPremium } from '@services/premium';
 import { useStreak } from '@features/profile/hooks';
 import '@i18n/index';
 
@@ -28,6 +29,7 @@ export default function RootLayout() {
     if (fontsLoaded) {
       const completed = storageService.isOnboardingCompleted();
       setOnboardingDone(completed);
+      initPremium();
       setIsReady(true);
       SplashScreen.hideAsync();
     }
@@ -55,6 +57,13 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
           name="profile"
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="paywall"
           options={{
             presentation: 'modal',
             headerShown: false,
