@@ -1,54 +1,93 @@
-import { StyleSheet, View, Pressable } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
-import { ScreenContainer, Title, Body } from '@shared/components';
+import { ScreenContainer, Title, Body, Button } from '@shared/components';
 import { colors, spacing } from '@shared/theme';
 import { storageService } from '@services/storage';
 import { getZodiacSignById } from '@shared/utils/zodiac';
+import { useReadingHistory, useNotifications } from '@features/profile/hooks';
+import {
+  StreakCounter,
+  BadgeGrid,
+  ReadingCalendar,
+  ReadingDayDetail,
+  NotificationSettings,
+} from '@features/profile/components';
+import type { BadgeInfo } from '@features/profile/types';
 
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const profile = storageService.getUserProfile();
+  const streak = storageService.getUserStreak();
+  const collectedCards = storageService.getCollectedCards();
   const sign = profile ? getZodiacSignById(profile.zodiacSign) : null;
+
+  const { getEntriesForDate, getDaysWithEntries } = useReadingHistory();
+  const { settings, updateSettings } = useNotifications();
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  const now = new Date();
+  const daysWithEntries = getDaysWithEntries(now.getMonth() + 1, now.getFullYear());
+  const selectedEntries = selectedDate ? getEntriesForDate(selectedDate) : [];
+
+  const badges: BadgeInfo[] = [
+    { id: '7_days', nameKey: 'badges.7_days', icon: '\uD83D\uDD25', current: Math.min(streak.currentStreak, 7), total: 7, earned: streak.badges.includes('7_days') },
+    { id: '30_days', nameKey: 'badges.30_days', icon: '\u2B50', current: Math.min(streak.currentStreak, 30), total: 30, earned: streak.badges.includes('30_days') },
+    { id: '100_days', nameKey: 'badges.100_days', icon: '\uD83D\uDC8E', current: Math.min(streak.currentStreak, 100), total: 100, earned: streak.badges.includes('100_days') },
+    { id: 'all_arcana', nameKey: 'badges.all_arcana', icon: '\u2721', current: collectedCards.length, total: 22, earned: streak.badges.includes('all_arcana') },
+  ];
 
   return (
     <ScreenContainer>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Pressable onPress={() => router.back()}>
-            <Body style={styles.backButton}>{t('common.back')}</Body>
-          </Pressable>
-          <Title>{t('profile.title')}</Title>
-        </View>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Pressable onPress={() => router.back()}>
+          <Body style={styles.backButton}>{t('common.back')}</Body>
+        </Pressable>
+        <Title>{t('profile.title')}</Title>
+
         {sign && (
           <View style={styles.signSection}>
             <Body style={styles.signSymbol}>{sign.symbol}</Body>
             <Body style={styles.signName}>{t(sign.nameKey)}</Body>
             {profile?.ascendant && (
-              <Body style={styles.ascendantText}>
-                Asc: {t(getZodiacSignById(profile.ascendant).nameKey)}
-              </Body>
+              <Body style={styles.ascendant}>Asc: {t(getZodiacSignById(profile.ascendant).nameKey)}</Body>
             )}
           </View>
         )}
-        <View style={styles.placeholder}>
-          <Body style={styles.placeholderText}>Streak, Badge, Storico — Fase 3</Body>
-        </View>
-      </View>
+
+        <StreakCounter currentStreak={streak.currentStreak} longestStreak={streak.longestStreak} />
+
+        <BadgeGrid badges={badges} />
+
+        <ReadingCalendar
+          daysWithEntries={daysWithEntries}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          maxDaysBack={7}
+        />
+
+        {selectedDate && (
+          <ReadingDayDetail date={selectedDate} entries={selectedEntries} />
+        )}
+
+        <NotificationSettings settings={settings} onUpdate={updateSettings} />
+
+        <Button title={t('profile.premium')} variant="ghost" onPress={() => {}} style={styles.premiumButton} />
+      </ScrollView>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: spacing.xl },
-  header: { gap: spacing.lg },
+  scroll: { flex: 1 },
+  scrollContent: { padding: spacing.xl, gap: spacing.xl, paddingBottom: spacing['5xl'] },
   backButton: { color: colors.gold, fontSize: 14 },
-  signSection: { alignItems: 'center', marginTop: spacing['3xl'], gap: spacing.sm },
+  signSection: { alignItems: 'center', gap: spacing.xs },
   signSymbol: { fontSize: 48 },
-  signName: { fontFamily: 'PlayfairDisplay-Bold', fontSize: 24 },
-  ascendantText: { opacity: 0.6, fontSize: 14 },
-  placeholder: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  placeholderText: { opacity: 0.3, fontSize: 14 },
+  signName: { fontFamily: 'PlayfairDisplay-Bold', fontSize: 24, color: colors.pearlWhite },
+  ascendant: { opacity: 0.6, fontSize: 14 },
+  premiumButton: { marginTop: spacing.lg },
 });
