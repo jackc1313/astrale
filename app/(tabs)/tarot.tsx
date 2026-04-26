@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { ScreenContainer, Body, Button } from "@shared/components";
 import { spacing } from "@shared/theme";
 import { useRewardedAd } from "@services/ads";
+import { usePremium } from '@services/premium';
 import { useTarot } from "@features/tarot/hooks";
 import {
   TarotFan,
@@ -16,12 +17,15 @@ import type { TarotMode, TarotCard } from "@features/tarot/types";
 export default function TarotScreen() {
   const { t } = useTranslation();
   const { showAd } = useRewardedAd();
+  const { isPremium } = usePremium();
   const {
     mode, setMode, drawnCards, interpretation, isDrawn,
     alreadyDrawnToday, drawCards, reset,
   } = useTarot();
 
-  const [unlockedModes, setUnlockedModes] = useState<TarotMode[]>(["daily"]);
+  const [unlockedModes, setUnlockedModes] = useState<TarotMode[]>(
+    isPremium ? ["daily", "three_card", "love"] : ["daily"]
+  );
 
   const handleUnlockMode = async (m: TarotMode) => {
     const rewarded = await showAd();
@@ -31,7 +35,7 @@ export default function TarotScreen() {
     }
   };
 
-  const lockedModes = (["three_card", "love"] as TarotMode[]).filter(
+  const lockedModes = isPremium ? [] : (["three_card", "love"] as TarotMode[]).filter(
     (m) => !unlockedModes.includes(m)
   );
 

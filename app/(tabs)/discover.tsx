@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { ScreenContainer, Body, Button } from "@shared/components";
 import { spacing } from "@shared/theme";
 import { useRewardedAd } from "@services/ads";
+import { usePremium } from '@services/premium';
 import { useWheel, useScratch } from "@features/discover/hooks";
 import {
   DiscoverTabs,
@@ -20,12 +21,13 @@ export default function DiscoverScreen() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<DiscoverTab>("wheel");
   const { showAd } = useRewardedAd();
+  const { isPremium } = usePremium();
 
   const wheel = useWheel();
   const scratch = useScratch();
 
   const handleSpinPress = async () => {
-    if (wheel.hasSpunToday) {
+    if (wheel.hasSpunToday && !isPremium) {
       const rewarded = await showAd();
       if (!rewarded) return;
     }
@@ -33,7 +35,7 @@ export default function DiscoverScreen() {
   };
 
   const handleScratchSelect = async (index: number) => {
-    if (scratch.hasScratchedToday) {
+    if (scratch.hasScratchedToday && !isPremium) {
       const rewarded = await showAd();
       if (!rewarded) return;
     }

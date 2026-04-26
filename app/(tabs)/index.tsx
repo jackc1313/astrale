@@ -8,6 +8,7 @@ import { ScreenContainer, Title, Body } from "@shared/components";
 import { colors, spacing } from "@shared/theme";
 import { storageService } from "@services/storage";
 import { useRewardedAd } from "@services/ads";
+import { usePremium } from '@services/premium';
 import { getZodiacSignById } from "@shared/utils/zodiac";
 import { useHoroscope } from "@features/horoscope/hooks";
 import {
@@ -24,6 +25,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { horoscope, isLoading, error } = useHoroscope();
   const { showAd } = useRewardedAd();
+  const { isPremium } = usePremium();
 
   const profile = storageService.getUserProfile();
   const sign = profile ? getZodiacSignById(profile.zodiacSign) : null;
@@ -31,15 +33,13 @@ export default function HomeScreen() {
   const todayStr = new Date().toISOString().split("T")[0];
   const usage = storageService.getDailyUsage(todayStr);
 
-  const [starsUnlocked, setStarsUnlocked] = useState(usage.freeHoroscopeRead);
-  const [unlockedSections, setUnlockedSections] = useState<
-    Record<HoroscopeSection, boolean>
-  >({
-    love: false,
-    work: false,
-    luck: false,
+  const [starsUnlocked, setStarsUnlocked] = useState(isPremium || usage.freeHoroscopeRead);
+  const [unlockedSections, setUnlockedSections] = useState<Record<HoroscopeSection, boolean>>({
+    love: isPremium,
+    work: isPremium,
+    luck: isPremium,
   });
-  const [affinityUnlocked, setAffinityUnlocked] = useState(false);
+  const [affinityUnlocked, setAffinityUnlocked] = useState(isPremium);
 
   const handleUnlockStars = async () => {
     const rewarded = await showAd();
@@ -158,12 +158,11 @@ export default function HomeScreen() {
           </View>
         )}
 
-        <View style={styles.bannerContainer}>
-          <BannerAd
-            unitId={TestIds.ADAPTIVE_BANNER}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-          />
-        </View>
+        {!isPremium && (
+          <View style={styles.bannerContainer}>
+            <BannerAd unitId={TestIds.ADAPTIVE_BANNER} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
+          </View>
+        )}
       </ScrollView>
     </ScreenContainer>
   );

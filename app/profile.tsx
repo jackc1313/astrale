@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { ScreenContainer, Title, Body, Button } from '@shared/components';
 import { colors, spacing } from '@shared/theme';
 import { storageService } from '@services/storage';
+import { usePremium } from '@services/premium';
+import { PremiumBanner } from '@features/premium/components';
 import { getZodiacSignById } from '@shared/utils/zodiac';
 import { useReadingHistory, useNotifications } from '@features/profile/hooks';
 import {
@@ -20,6 +22,7 @@ import type { BadgeInfo } from '@features/profile/types';
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const router = useRouter();
+  const { isPremium } = usePremium();
   const profile = storageService.getUserProfile();
   const streak = storageService.getUserStreak();
   const collectedCards = storageService.getCollectedCards();
@@ -66,7 +69,7 @@ export default function ProfileScreen() {
           daysWithEntries={daysWithEntries}
           selectedDate={selectedDate}
           onSelectDate={setSelectedDate}
-          maxDaysBack={7}
+          maxDaysBack={isPremium ? 30 : 7}
         />
 
         {selectedDate && (
@@ -75,7 +78,7 @@ export default function ProfileScreen() {
 
         <NotificationSettings settings={settings} onUpdate={updateSettings} />
 
-        <Button title={t('profile.premium')} variant="ghost" onPress={() => {}} style={styles.premiumButton} />
+        {!isPremium && <PremiumBanner />}
       </ScrollView>
     </ScreenContainer>
   );
