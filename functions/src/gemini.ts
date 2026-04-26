@@ -15,7 +15,7 @@ const getClient = (): GoogleGenerativeAI => {
 export const generateJSON = async <T>(prompt: string): Promise<T> => {
   const client = getClient();
   const model = client.getGenerativeModel({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     generationConfig: {
       responseMimeType: "application/json",
       temperature: 0.9,
