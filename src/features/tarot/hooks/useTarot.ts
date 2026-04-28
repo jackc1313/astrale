@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
 
-import { db } from "@services/firebase";
 import { storage, storageService } from "@services/storage";
 import type {
   TarotCard,
@@ -19,28 +17,39 @@ type SavedDraw = {
   date: string;
   cardId: string;
   orientation: CardOrientation;
+  interpretation?: TarotInterpretation;
+};
+
+const loadSavedDraw = (): { cards: DrawnCard[]; drawn: boolean; interpretation: TarotInterpretation | null } => {
+  const saved = storage.getString(TODAY_DRAW_KEY);
+  if (saved) {
+    const parsed = JSON.parse(saved) as SavedDraw;
+    if (parsed.date === today()) {
+      const card = majorArcana.find((c) => c.id === parsed.cardId);
+      if (card) {
+        return {
+          cards: [{ card, orientation: parsed.orientation }],
+          drawn: true,
+          interpretation: parsed.interpretation ?? null,
+        };
+      }
+    }
+  }
+  return { cards: [], drawn: false, interpretation: null };
 };
 
 export const useTarot = () => {
+  const savedDraw = loadSavedDraw();
   const [mode, setMode] = useState<TarotMode>("daily");
-  const [drawnCards, setDrawnCards] = useState<DrawnCard[]>([]);
-  const [interpretation, setInterpretation] = useState<TarotInterpretation | null>(null);
+  const [drawnCards, setDrawnCards] = useState<DrawnCard[]>(savedDraw.cards);
+  const [interpretation, setInterpretation] = useState<TarotInterpretation | null>(savedDraw.interpretation);
   const [isDrawn, setIsDrawn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [alreadyDrawnToday, setAlreadyDrawnToday] = useState(false);
+  const [alreadyDrawnToday, setAlreadyDrawnToday] = useState(savedDraw.drawn);
 
   useEffect(() => {
-    const saved = storage.getString(TODAY_DRAW_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved) as SavedDraw;
-      if (parsed.date === today()) {
-        const card = majorArcana.find((c) => c.id === parsed.cardId);
-        if (card) {
-          setDrawnCards([{ card, orientation: parsed.orientation }]);
-          setAlreadyDrawnToday(true);
-          fetchInterpretation(card.id);
-        }
-      }
+    if (savedDraw.drawn && savedDraw.cards.length > 0) {
+      fetchInterpretation(savedDraw.cards[0].card.id);
     }
   }, []);
 
@@ -49,13 +58,25 @@ export const useTarot = () => {
     if (!profile) return;
 
     try {
-      const docRef = doc(db, "tarot_interpretations", cardId);
-      const snap = await getDoc(docRef);
-      if (snap.exists()) {
-        const data = snap.data();
-        const contextual = data.contextual?.[profile.zodiacSign];
-        if (contextual) {
-          setInterpretation(contextual as TarotInterpretation);
+      const projectId = process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID;
+      const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/tarot_interpretations/${cardId}`;
+      const response = await fetch(url);
+      const json = await response.json();
+
+      if (json.fields?.contextual?.mapValue?.fields?.[profile.zodiacSign]) {
+        const signData = json.fields.contextual.mapValue.fields[profile.zodiacSign].mapValue.fields;
+        const interp: TarotInterpretation = {
+          love: signData.love?.stringValue ?? "",
+          work: signData.work?.stringValue ?? "",
+          general: signData.general?.stringValue ?? "",
+        };
+        setInterpretation(interp);
+
+        const saved = storage.getString(TODAY_DRAW_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved) as SavedDraw;
+          parsed.interpretation = interp;
+          storage.set(TODAY_DRAW_KEY, JSON.stringify(parsed));
         }
       }
     } catch (err) {
@@ -109,8 +130,9 @@ export const useTarot = () => {
   }, [mode, alreadyDrawnToday]);
 
   const reset = () => {
-    setDrawnCards([]);
-    setInterpretation(null);
+    const saved = loadSavedDraw();
+    setDrawnCards(saved.drawn ? saved.cards : []);
+    setInterpretation(saved.interpretation);
     setIsDrawn(false);
   };
 
