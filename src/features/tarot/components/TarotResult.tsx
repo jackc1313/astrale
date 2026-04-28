@@ -11,6 +11,7 @@ type TarotResultProps = {
   drawnCards: DrawnCard[];
   interpretation: TarotInterpretation | null;
   mode: TarotMode;
+  countdown?: string;
 };
 
 const THREE_CARD_LABELS: Record<string, string[]> = {
@@ -18,7 +19,7 @@ const THREE_CARD_LABELS: Record<string, string[]> = {
   love: ["tarot.you", "tarot.partner", "tarot.relationship"],
 };
 
-export const TarotResult = ({ drawnCards, interpretation, mode }: TarotResultProps) => {
+export const TarotResult = ({ drawnCards, interpretation, mode, countdown }: TarotResultProps) => {
   const { t } = useTranslation();
   const labels = THREE_CARD_LABELS[mode];
 
@@ -57,6 +58,13 @@ export const TarotResult = ({ drawnCards, interpretation, mode }: TarotResultPro
             <Body style={styles.interpretationText}>{interpretation.general}</Body>
           </Card>
         )}
+
+        {countdown && (
+          <View style={styles.countdownContainer}>
+            <Body style={styles.countdownLabel}>Prossima carta tra</Body>
+            <Body style={styles.countdownTime}>{countdown}</Body>
+          </View>
+        )}
       </ScrollView>
     </Animated.View>
   );
@@ -74,4 +82,7 @@ const styles = StyleSheet.create({
   interpretationCard: { marginTop: spacing.sm },
   interpretationTitle: { fontSize: 14, marginBottom: spacing.xs },
   interpretationText: { lineHeight: 22, fontSize: 14 },
+  countdownContainer: { alignItems: "center", gap: spacing.xs, marginTop: spacing.xl },
+  countdownLabel: { fontSize: 12, opacity: 0.5 },
+  countdownTime: { fontSize: 24, fontFamily: "PlayfairDisplay-Bold", color: colors.gold },
 });

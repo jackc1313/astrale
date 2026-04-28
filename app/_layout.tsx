@@ -4,6 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import { storageService } from '@services/storage';
 import { initPremium } from '@services/premium';
 import { useStreak } from '@features/profile/hooks';
@@ -51,7 +53,7 @@ export default function RootLayout() {
   if (!isReady) return null;
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar style="light" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(onboarding)" />
@@ -71,6 +73,6 @@ export default function RootLayout() {
           }}
         />
       </Stack>
-    </>
+    </GestureHandlerRootView>
   );
 }
