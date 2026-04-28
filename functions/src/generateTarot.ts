@@ -28,13 +28,19 @@ type TarotContextual = {
 export const generateTarotInterpretations = onCall(
   {
     memory: "512MiB",
-    timeoutSeconds: 540,
+    timeoutSeconds: 3600,
   },
   async () => {
     const db = admin.firestore();
 
     for (const cardId of MAJOR_ARCANA) {
       try {
+        const existing = await db.doc(`tarot_interpretations/${cardId}`).get();
+        if (existing.exists) {
+          console.log(`Skipping tarot: ${cardId} (already exists)`);
+          continue;
+        }
+
         const basePrompt = buildTarotBasePrompt(cardId);
         const base = await generateJSON<TarotBase>(basePrompt);
         await delay(4500);

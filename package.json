@@ -30,6 +30,7 @@
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo-google-fonts/playfair-display": "^0.4.2",
+    "@google/generative-ai": "^0.24.1",
     "@react-native-community/datetimepicker": "8.4.4",
     "@shopify/react-native-skia": "^2.6.2",
     "expo": "~54.0.33",
@@ -45,6 +46,7 @@
     "expo-splash-screen": "~31.0.13",
     "expo-status-bar": "~3.0.9",
     "firebase": "^12.12.1",
+    "firebase-admin": "^13.8.0",
     "i18next": "^26.0.8",
     "react": "19.1.0",
     "react-i18next": "^17.0.4",
