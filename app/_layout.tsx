@@ -38,14 +38,15 @@ export default function RootLayout() {
   useEffect(() => {
     if (!isReady) return;
 
+    const completed = storageService.isOnboardingCompleted();
     const inOnboarding = segments[0] === '(onboarding)';
 
-    if (!onboardingDone && !inOnboarding) {
+    if (!completed && !inOnboarding) {
       router.replace('/(onboarding)/sign');
-    } else if (onboardingDone && inOnboarding) {
+    } else if (completed && inOnboarding) {
       router.replace('/(tabs)');
     }
-  }, [isReady, onboardingDone, segments]);
+  }, [isReady, segments]);
 
   if (!isReady) return null;
 

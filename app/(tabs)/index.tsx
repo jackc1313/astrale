@@ -33,26 +33,21 @@ export default function HomeScreen() {
   const todayStr = new Date().toISOString().split("T")[0];
   const usage = storageService.getDailyUsage(todayStr);
 
-  const [starsUnlocked, setStarsUnlocked] = useState(isPremium || usage.freeHoroscopeRead);
+  // Stars always free
+  const starsUnlocked = true;
+
+  // One section free: love if user selected it, otherwise first interest
+  const interests = profile?.interests ?? [];
+  const freeSection: HoroscopeSection =
+    interests.includes("love") ? "love" :
+    (interests[0] as HoroscopeSection | undefined) ?? "love";
+
   const [unlockedSections, setUnlockedSections] = useState<Record<HoroscopeSection, boolean>>({
-    love: isPremium,
-    work: isPremium,
-    luck: isPremium,
+    love: isPremium || freeSection === "love",
+    work: isPremium || freeSection === "work",
+    luck: isPremium || freeSection === "luck",
   });
   const [affinityUnlocked, setAffinityUnlocked] = useState(isPremium);
-
-  const handleUnlockStars = async () => {
-    const rewarded = await showAd();
-    if (rewarded) {
-      setStarsUnlocked(true);
-      const updated = storageService.getDailyUsage(todayStr);
-      storageService.setDailyUsage({
-        ...updated,
-        freeHoroscopeRead: true,
-        rewardedAdsWatched: updated.rewardedAdsWatched + 1,
-      });
-    }
-  };
 
   const handleUnlockSection = async (section: HoroscopeSection) => {
     const rewarded = await showAd();
@@ -129,7 +124,7 @@ export default function HomeScreen() {
             <StarsIndicator
               stars={horoscope.stars}
               unlocked={starsUnlocked}
-              onUnlock={handleUnlockStars}
+              onUnlock={() => {}}
             />
 
             {(["love", "work", "luck"] as HoroscopeSection[]).map(
@@ -158,12 +153,12 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {!isPremium && (
-          <View style={styles.bannerContainer}>
-            <BannerAd unitId={TestIds.ADAPTIVE_BANNER} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
-          </View>
-        )}
       </ScrollView>
+      {!isPremium && (
+        <View style={styles.bannerContainer}>
+          <BannerAd unitId={TestIds.ADAPTIVE_BANNER} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
+        </View>
+      )}
     </ScreenContainer>
   );
 }

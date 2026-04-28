@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable, View } from 'react-native';
+import { StyleSheet, Pressable, View, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { colors, radius, spacing } from '@shared/theme';
@@ -23,7 +23,7 @@ export const ZodiacGrid = ({ selected, onSelect }: ZodiacGridProps) => {
             onPress={() => onSelect(sign.id)}
             style={[styles.cell, isSelected ? styles.cellSelected : styles.cellDefault]}
           >
-            <Body style={styles.symbol}>{sign.symbol}</Body>
+            <Text style={styles.symbol}>{sign.emoji}</Text>
             <Body style={styles.name}>{t(sign.nameKey)}</Body>
           </Pressable>
         );

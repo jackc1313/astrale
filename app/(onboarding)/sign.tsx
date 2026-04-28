@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +12,6 @@ export default function SignScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const { birthDate, setBirthDate, zodiacSign, setZodiacSign } = useOnboardingContext();
-  const [showPicker, setShowPicker] = useState(false);
 
   const handleDateChange = (_: unknown, date?: Date) => {
     if (date) {
@@ -22,7 +20,6 @@ export default function SignScreen() {
       const day = date.getDate();
       setZodiacSign(getZodiacSign(month, day));
     }
-    setShowPicker(false);
   };
 
   const sign = zodiacSign ? getZodiacSignById(zodiacSign) : null;
@@ -35,14 +32,7 @@ export default function SignScreen() {
           <Title>{t('onboarding.sign.title')}</Title>
           <Body style={styles.subtitle}>{t('onboarding.sign.subtitle')}</Body>
         </View>
-        <View style={styles.pickerButton}>
-          <Button
-            title={birthDate.toLocaleDateString('it-IT')}
-            variant="ghost"
-            onPress={() => setShowPicker(true)}
-          />
-        </View>
-        {showPicker && (
+        <View style={styles.pickerWrapper}>
           <DateTimePicker
             value={birthDate}
             mode="date"
@@ -51,11 +41,12 @@ export default function SignScreen() {
             minimumDate={new Date(1920, 0, 1)}
             onChange={handleDateChange}
             themeVariant="dark"
+            style={styles.picker}
           />
-        )}
+        </View>
         {sign && (
           <View style={styles.result}>
-            <Body style={styles.signSymbol}>{sign.symbol}</Body>
+            <Text style={styles.signEmoji}>{sign.emoji}</Text>
             <Body style={styles.signName}>{t(sign.nameKey)}</Body>
           </View>
         )}
@@ -75,9 +66,10 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl },
   header: { marginTop: spacing['3xl'], gap: spacing.sm },
   subtitle: { opacity: 0.6, fontSize: 11 },
-  pickerButton: { marginTop: spacing.xl },
+  pickerWrapper: { alignItems: 'center', marginTop: spacing.lg },
+  picker: { height: 150, width: '100%' },
   result: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
-  signSymbol: { fontSize: 48 },
+  signEmoji: { fontSize: 48 },
   signName: { fontFamily: 'PlayfairDisplay-Bold', fontSize: 20 },
   footer: { marginTop: 'auto' },
 });

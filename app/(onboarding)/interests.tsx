@@ -10,9 +10,9 @@ import { useOnboardingContext } from './_layout';
 
 const INTERESTS: { id: InterestId; icon: string; titleKey: string; descKey: string }[] = [
   { id: 'love', icon: '\u2764', titleKey: 'onboarding.interests.love', descKey: 'onboarding.interests.loveDesc' },
-  { id: 'work', icon: '\u2605', titleKey: 'onboarding.interests.work', descKey: 'onboarding.interests.workDesc' },
-  { id: 'health', icon: '\u2665', titleKey: 'onboarding.interests.health', descKey: 'onboarding.interests.healthDesc' },
-  { id: 'luck', icon: '\u2618', titleKey: 'onboarding.interests.luck', descKey: 'onboarding.interests.luckDesc' },
+  { id: 'work', icon: '\u2B50', titleKey: 'onboarding.interests.work', descKey: 'onboarding.interests.workDesc' },
+  { id: 'health', icon: '\uD83D\uDC9A', titleKey: 'onboarding.interests.health', descKey: 'onboarding.interests.healthDesc' },
+  { id: 'luck', icon: '\uD83C\uDF40', titleKey: 'onboarding.interests.luck', descKey: 'onboarding.interests.luckDesc' },
 ];
 
 export default function InterestsScreen() {

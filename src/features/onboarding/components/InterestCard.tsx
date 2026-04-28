@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable, View } from 'react-native';
+import { StyleSheet, Pressable, View, Text } from 'react-native';
 
 import { colors, radius, spacing } from '@shared/theme';
 import { Body } from '@shared/components';
@@ -17,7 +17,7 @@ export const InterestCard = ({ icon, title, description, selected, onPress }: In
       onPress={onPress}
       style={[styles.card, selected ? styles.cardSelected : styles.cardDefault]}
     >
-      <Body style={styles.icon}>{icon}</Body>
+      <Text style={styles.icon}>{icon}</Text>
       <View style={styles.text}>
         <Body style={styles.title}>{title}</Body>
         <Body style={styles.description}>{description}</Body>

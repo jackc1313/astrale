@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as Notifications from 'expo-notifications';
@@ -27,7 +27,7 @@ export default function NotificationsScreen() {
       <View style={styles.container}>
         <ProgressBar steps={4} currentStep={4} />
         <View style={styles.content}>
-          <Body style={styles.bellIcon}>{'\uD83D\uDD14'}</Body>
+          <Text style={styles.bellIcon}>{'\uD83D\uDD14'}</Text>
           <Title style={styles.title}>{t('onboarding.notifications.title')}</Title>
           <Body style={styles.subtitle}>{t('onboarding.notifications.subtitle')}</Body>
         </View>
@@ -45,7 +45,7 @@ export default function NotificationsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl },
   content: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md },
-  bellIcon: { fontSize: 56, marginBottom: spacing.xl },
+  bellIcon: { fontSize: 56, marginBottom: spacing.xl, lineHeight: 70 },
   title: { fontSize: 20, textAlign: 'center' },
   subtitle: { fontSize: 12, opacity: 0.6, textAlign: 'center', lineHeight: 20, maxWidth: 220 },
   footer: { gap: spacing.md, alignItems: 'center' },
