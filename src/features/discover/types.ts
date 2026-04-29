@@ -5,3 +5,10 @@ export type WheelItem = {
   label: string;
   fullText: string;
 };
+
+export type StoneReading = {
+  name: string;
+  emoji: string;
+  properties: string;
+  message: string;
+};

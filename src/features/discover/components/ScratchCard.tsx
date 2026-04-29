@@ -1,12 +1,13 @@
 import { useRef, useState, useCallback } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions, Text } from "react-native";
 import { Canvas, Path, Skia, Rect, Group, Circle, Line } from "@shopify/react-native-skia";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, { runOnJS, useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
 
-import { Body } from "@shared/components";
+import { Body, Label } from "@shared/components";
 import { colors, radius, spacing } from "@shared/theme";
+import type { StoneReading } from "../types";
 
 const CARD_WIDTH = Dimensions.get("window").width - 80;
 const CARD_HEIGHT = 200;
@@ -15,7 +16,7 @@ const CELL_SIZE = 18;
 const REVEAL_THRESHOLD = 0.7;
 
 type ScratchCardProps = {
-  content: string;
+  stone: StoneReading;
   onReveal: () => void;
 };
 
@@ -47,7 +48,7 @@ const generateGritTexture = () => {
   return { dots, scratches };
 };
 
-export const ScratchCard = ({ content, onReveal }: ScratchCardProps) => {
+export const ScratchCard = ({ stone, onReveal }: ScratchCardProps) => {
   const [revealed, setRevealed] = useState(false);
   const grit = useRef(generateGritTexture());
   const scratchPath = useRef(Skia.Path.Make());
@@ -112,10 +113,19 @@ export const ScratchCard = ({ content, onReveal }: ScratchCardProps) => {
       runOnJS(handleEnd)();
     });
 
+  const stoneContent = (
+    <>
+      <Text style={styles.stoneEmoji}>{stone.emoji}</Text>
+      <Body style={styles.stoneName}>{stone.name}</Body>
+      <Label style={styles.stoneProperties}>{stone.properties}</Label>
+      <Body style={styles.stoneMessage}>{stone.message}</Body>
+    </>
+  );
+
   if (revealed) {
     return (
       <View style={styles.revealedCard}>
-        <Body style={styles.contentText}>{content}</Body>
+        {stoneContent}
       </View>
     );
   }
@@ -123,7 +133,7 @@ export const ScratchCard = ({ content, onReveal }: ScratchCardProps) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.contentLayer}>
-        <Body style={styles.contentText}>{content}</Body>
+        {stoneContent}
       </View>
 
       <GestureDetector gesture={panGesture}>
@@ -161,18 +171,27 @@ const styles = StyleSheet.create({
   },
   contentLayer: {
     position: "absolute", width: CARD_WIDTH, height: CARD_HEIGHT,
-    justifyContent: "center", alignItems: "center", padding: spacing.xl,
-    backgroundColor: colors.deepPurple,
+    justifyContent: "center", alignItems: "center", padding: spacing.lg,
+    backgroundColor: colors.deepPurple, gap: spacing.xs,
   },
-  contentText: {
-    fontFamily: "PlayfairDisplay-Bold", fontSize: 16,
-    color: colors.pearlWhite, textAlign: "center", lineHeight: 24,
+  stoneEmoji: { fontSize: 32 },
+  stoneName: {
+    fontFamily: "PlayfairDisplay-Bold", fontSize: 18,
+    color: colors.gold, textAlign: "center",
+  },
+  stoneProperties: {
+    fontSize: 11, color: colors.gold, textAlign: "center",
+    opacity: 0.8, letterSpacing: 0.5,
+  },
+  stoneMessage: {
+    fontSize: 12, color: colors.pearlWhite, textAlign: "center",
+    lineHeight: 18, opacity: 0.85, marginTop: spacing.xs,
   },
   canvasLayer: { width: CARD_WIDTH, height: CARD_HEIGHT },
   canvas: { width: CARD_WIDTH, height: CARD_HEIGHT },
   revealedCard: {
     width: CARD_WIDTH, height: CARD_HEIGHT, borderRadius: radius.xl,
     borderWidth: 1, borderColor: colors.goldBorder, backgroundColor: colors.deepPurple,
-    justifyContent: "center", alignItems: "center", padding: spacing.xl,
+    justifyContent: "center", alignItems: "center", padding: spacing.lg, gap: spacing.xs,
   },
 });

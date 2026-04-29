@@ -1,14 +1,56 @@
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
 
-import { db } from "@services/firebase";
 import { storage, storageService } from "@services/storage";
+import type { StoneReading } from "../types";
 
-const CACHE_KEY_PREFIX = "scratch.cache";
+const CACHE_KEY_PREFIX = "scratch.cache.v2";
 const today = (): string => new Date().toISOString().split("T")[0];
 
+const STONES: StoneReading[] = [
+  { name: "Ametista", emoji: "\uD83D\uDD2E", properties: "protezione, intuizione, calma", message: "" },
+  { name: "Quarzo Rosa", emoji: "\uD83C\uDF38", properties: "amore, guarigione, armonia", message: "" },
+  { name: "Ossidiana", emoji: "\u26AB", properties: "forza, verita', trasformazione", message: "" },
+  { name: "Lapislazzuli", emoji: "\uD83D\uDD35", properties: "saggezza, consapevolezza, chiarezza", message: "" },
+  { name: "Citrino", emoji: "\uD83D\uDFE1", properties: "abbondanza, gioia, energia", message: "" },
+  { name: "Turchese", emoji: "\uD83D\uDFE2", properties: "comunicazione, protezione, serenita'", message: "" },
+  { name: "Agata", emoji: "\uD83D\uDFE4", properties: "equilibrio, stabilita', radicamento", message: "" },
+  { name: "Corniola", emoji: "\uD83D\uDFE0", properties: "coraggio, passione, vitalita'", message: "" },
+  { name: "Giada", emoji: "\uD83D\uDC9A", properties: "fortuna, prosperita', armonia", message: "" },
+  { name: "Pietra di Luna", emoji: "\uD83C\uDF19", properties: "intuizione, femminilita', cicli", message: "" },
+  { name: "Opale", emoji: "\uD83E\uDEE7", properties: "creativita', ispirazione, magia", message: "" },
+  { name: "Rubino", emoji: "\u2764\uFE0F", properties: "passione, coraggio, amore ardente", message: "" },
+  { name: "Smeraldo", emoji: "\uD83D\uDC8E", properties: "rinascita, amore, visione", message: "" },
+  { name: "Ambra", emoji: "\uD83E\uDEA8", properties: "calore, purificazione, luce interiore", message: "" },
+  { name: "Tormalina Nera", emoji: "\u2B1B", properties: "protezione, schermatura, forza", message: "" },
+  { name: "Acquamarina", emoji: "\uD83D\uDCA7", properties: "calma, coraggio, comunicazione", message: "" },
+  { name: "Occhio di Tigre", emoji: "\uD83D\uDC05", properties: "determinazione, focus, protezione", message: "" },
+  { name: "Fluorite", emoji: "\uD83D\uDFE3", properties: "chiarezza mentale, ordine, concentrazione", message: "" },
+  { name: "Selenite", emoji: "\u2B1C", properties: "purificazione, pace, luce divina", message: "" },
+  { name: "Malachite", emoji: "\u2733\uFE0F", properties: "trasformazione, guarigione, crescita", message: "" },
+];
+
+const getStoneMessage = (stone: StoneReading, sign: string): string => {
+  const messages: Record<string, string[]> = {
+    aries: ["La tua energia ardente trova equilibrio", "Il fuoco interiore si amplifica", "Una nuova forza ti attraversa"],
+    taurus: ["La stabilita' diventa il tuo superpotere", "Radici profonde portano frutti", "La pazienza viene premiata"],
+    gemini: ["La dualita' trova armonia", "Le parole giuste arrivano al momento giusto", "La curiosita' ti guida"],
+    cancer: ["Le emozioni si trasformano in saggezza", "La tua sensibilita' e' un dono", "L'intuito ti protegge"],
+    leo: ["La tua luce interiore brilla piu' forte", "Il coraggio apre nuove porte", "Sei nato per risplendere"],
+    virgo: ["L'ordine nasce dal caos", "La precisione e' la tua forza", "Ogni dettaglio ha un significato"],
+    libra: ["L'equilibrio porta bellezza", "L'armonia ti circonda", "La giustizia e' dalla tua parte"],
+    scorpio: ["La trasformazione e' il tuo potere", "Il mistero si svela", "La profondita' ti arricchisce"],
+    sagittarius: ["L'avventura chiama il tuo nome", "La verita' ti libera", "L'orizzonte si espande"],
+    capricorn: ["La disciplina porta risultati", "La vetta e' piu' vicina", "Il tempo e' il tuo alleato"],
+    aquarius: ["L'innovazione nasce da te", "Il futuro ti sorride", "La liberta' e' la tua strada"],
+    pisces: ["I sogni diventano realta'", "L'empatia e' la tua forza", "Le correnti ti guidano"],
+  };
+  const signMessages = messages[sign] ?? messages.aries;
+  const idx = stone.name.length % signMessages.length;
+  return `${signMessages[idx]} con ${stone.name}. ${stone.properties.split(", ")[0].charAt(0).toUpperCase() + stone.properties.split(", ")[0].slice(1)} e ${stone.properties.split(", ")[1]} accompagnano la tua giornata.`;
+};
+
 export const useScratch = () => {
-  const [contents, setContents] = useState<string[]>([]);
+  const [stones, setStones] = useState<StoneReading[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,42 +60,44 @@ export const useScratch = () => {
   const [hasScratchedToday, setHasScratchedToday] = useState(usage.scratchUsed);
 
   useEffect(() => {
-    const fetchContent = async () => {
-      const cacheKey = `${CACHE_KEY_PREFIX}.${todayStr}`;
-      const cached = storage.getString(cacheKey);
+    const profile = storageService.getUserProfile();
+    const sign = profile?.zodiacSign ?? "aries";
 
-      if (cached) {
-        const parsed = JSON.parse(cached) as string[];
-        setContents(parsed.slice(0, 3));
-        setIsLoading(false);
-        return;
-      }
+    const cacheKey = `${CACHE_KEY_PREFIX}.${todayStr}`;
+    const cached = storage.getString(cacheKey);
 
-      try {
-        const docRef = doc(db, "daily_content", todayStr);
-        const snap = await getDoc(docRef);
-        if (snap.exists()) {
-          const data = snap.data();
-          const scratch = (data.scratch ?? []) as string[];
-          storage.set(cacheKey, JSON.stringify(scratch));
-          setContents(scratch.slice(0, 3));
-        }
-      } catch (err) {
-        console.error("Failed to fetch scratch content:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (cached) {
+      setStones(JSON.parse(cached) as StoneReading[]);
+      setIsLoading(false);
+      return;
+    }
 
-    fetchContent();
+    // Pick 3 random stones for today using date as seed
+    const seed = todayStr.split("-").reduce((a, b) => a + parseInt(b), 0);
+    const shuffled = [...STONES].sort((a, b) => {
+      const ha = (a.name.charCodeAt(0) * seed) % 100;
+      const hb = (b.name.charCodeAt(0) * seed) % 100;
+      return ha - hb;
+    });
+
+    const picked: StoneReading[] = shuffled.slice(0, 3).map((stone) => ({
+      ...stone,
+      message: getStoneMessage(stone, sign),
+    }));
+
+    storage.set(cacheKey, JSON.stringify(picked));
+    setStones(picked);
+    setIsLoading(false);
   }, [todayStr]);
 
   const selectCard = (index: number) => { setSelectedIndex(index); };
 
   const reveal = () => {
     setIsRevealed(true);
-    const content = contents[selectedIndex ?? 0] ?? '';
-    storageService.addReadingEntry('scratch', content.slice(0, 80));
+    const stone = stones[selectedIndex ?? 0];
+    if (stone) {
+      storageService.addReadingEntry('scratch', `${stone.name} — ${stone.properties}`);
+    }
     if (!hasScratchedToday) {
       setHasScratchedToday(true);
       const usage = storageService.getDailyUsage(todayStr);
@@ -64,7 +108,7 @@ export const useScratch = () => {
   const reset = () => { setSelectedIndex(null); setIsRevealed(false); };
 
   return {
-    contents, selectedIndex, isRevealed, isLoading, hasScratchedToday,
+    stones, selectedIndex, isRevealed, isLoading, hasScratchedToday,
     selectCard, reveal, reset,
   };
 };
