@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { Canvas, Path, Skia, Rect, Group } from "@shopify/react-native-skia";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, { runOnJS, useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
 
 import { Body } from "@shared/components";
@@ -9,8 +10,9 @@ import { colors, radius, spacing } from "@shared/theme";
 
 const CARD_WIDTH = Dimensions.get("window").width - 80;
 const CARD_HEIGHT = 200;
-const STROKE_WIDTH = 40;
-const REVEAL_THRESHOLD = 0.6;
+const STROKE_WIDTH = 28;
+const CELL_SIZE = 18;
+const REVEAL_THRESHOLD = 0.7;
 
 type ScratchCardProps = {
   content: string;
@@ -21,43 +23,64 @@ export const ScratchCard = ({ content, onReveal }: ScratchCardProps) => {
   const [revealed, setRevealed] = useState(false);
   const scratchPath = useRef(Skia.Path.Make());
   const touchCount = useRef(0);
-  const totalCells = useRef(Math.ceil((CARD_WIDTH * CARD_HEIGHT) / (STROKE_WIDTH * STROKE_WIDTH)));
+  const totalCells = useRef(Math.ceil((CARD_WIDTH * CARD_HEIGHT) / (CELL_SIZE * CELL_SIZE)));
   const touchedCells = useRef(new Set<string>());
   const [, forceUpdate] = useState(0);
+  const overlayOpacity = useSharedValue(1);
+
+  const animatedOverlayStyle = useAnimatedStyle(() => ({
+    opacity: overlayOpacity.value,
+  }));
 
   const checkReveal = () => {
     const coverage = touchedCells.current.size / totalCells.current;
     if (coverage >= REVEAL_THRESHOLD && !revealed) {
-      setRevealed(true);
+      overlayOpacity.value = withTiming(0, { duration: 600 }, (finished) => {
+        if (finished) {
+          runOnJS(setRevealed)(true);
+        }
+      });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       onReveal();
     }
   };
 
   const trackCell = (x: number, y: number) => {
-    const cellX = Math.floor(x / STROKE_WIDTH);
-    const cellY = Math.floor(y / STROKE_WIDTH);
+    const cellX = Math.floor(x / CELL_SIZE);
+    const cellY = Math.floor(y / CELL_SIZE);
     touchedCells.current.add(`${cellX},${cellY}`);
   };
 
+  const handleStart = useCallback((x: number, y: number) => {
+    scratchPath.current.moveTo(x, y);
+    trackCell(x, y);
+    touchCount.current++;
+    forceUpdate((n) => n + 1);
+  }, []);
+
+  const handleUpdate = useCallback((x: number, y: number) => {
+    scratchPath.current.lineTo(x, y);
+    trackCell(x, y);
+    touchCount.current++;
+    if (touchCount.current % 5 === 0) {
+      forceUpdate((n) => n + 1);
+      checkReveal();
+    }
+  }, []);
+
+  const handleEnd = useCallback(() => {
+    checkReveal();
+  }, []);
+
   const panGesture = Gesture.Pan()
     .onStart((e) => {
-      scratchPath.current.moveTo(e.x, e.y);
-      trackCell(e.x, e.y);
-      touchCount.current++;
-      forceUpdate((n) => n + 1);
+      runOnJS(handleStart)(e.x, e.y);
     })
     .onUpdate((e) => {
-      scratchPath.current.lineTo(e.x, e.y);
-      trackCell(e.x, e.y);
-      touchCount.current++;
-      if (touchCount.current % 5 === 0) {
-        forceUpdate((n) => n + 1);
-        checkReveal();
-      }
+      runOnJS(handleUpdate)(e.x, e.y);
     })
     .onEnd(() => {
-      checkReveal();
+      runOnJS(handleEnd)();
     });
 
   if (revealed) {
@@ -75,7 +98,7 @@ export const ScratchCard = ({ content, onReveal }: ScratchCardProps) => {
       </View>
 
       <GestureDetector gesture={panGesture}>
-        <View style={styles.canvasLayer}>
+        <Animated.View style={[styles.canvasLayer, animatedOverlayStyle]}>
           <Canvas style={styles.canvas}>
             <Rect x={0} y={0} width={CARD_WIDTH} height={CARD_HEIGHT} color="#2a1838" />
             <Rect x={0} y={0} width={CARD_WIDTH} height={CARD_HEIGHT} color="#d4af3730" />
@@ -90,7 +113,7 @@ export const ScratchCard = ({ content, onReveal }: ScratchCardProps) => {
               />
             </Group>
           </Canvas>
-        </View>
+        </Animated.View>
       </GestureDetector>
     </View>
   );
