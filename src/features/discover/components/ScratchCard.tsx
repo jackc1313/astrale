@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { Canvas, Path, Skia, Rect, Group } from "@shopify/react-native-skia";
+import { Canvas, Path, Skia, Rect, Group, Circle, Line } from "@shopify/react-native-skia";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, { runOnJS, useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
@@ -19,8 +19,37 @@ type ScratchCardProps = {
   onReveal: () => void;
 };
 
+const generateGritTexture = () => {
+  const dots: { x: number; y: number; r: number; color: string }[] = [];
+  const scratches: { x1: number; y1: number; x2: number; y2: number; color: string }[] = [];
+
+  for (let i = 0; i < 300; i++) {
+    dots.push({
+      x: Math.random() * CARD_WIDTH,
+      y: Math.random() * CARD_HEIGHT,
+      r: Math.random() * 1.5 + 0.5,
+      color: Math.random() > 0.5 ? "rgba(212,175,55,0.15)" : "rgba(255,255,255,0.06)",
+    });
+  }
+
+  for (let i = 0; i < 60; i++) {
+    const x = Math.random() * CARD_WIDTH;
+    const y = Math.random() * CARD_HEIGHT;
+    scratches.push({
+      x1: x,
+      y1: y,
+      x2: x + (Math.random() - 0.5) * 30,
+      y2: y + (Math.random() - 0.5) * 8,
+      color: Math.random() > 0.5 ? "rgba(212,175,55,0.12)" : "rgba(255,255,255,0.04)",
+    });
+  }
+
+  return { dots, scratches };
+};
+
 export const ScratchCard = ({ content, onReveal }: ScratchCardProps) => {
   const [revealed, setRevealed] = useState(false);
+  const grit = useRef(generateGritTexture());
   const scratchPath = useRef(Skia.Path.Make());
   const touchCount = useRef(0);
   const totalCells = useRef(Math.ceil((CARD_WIDTH * CARD_HEIGHT) / (CELL_SIZE * CELL_SIZE)));
@@ -102,6 +131,12 @@ export const ScratchCard = ({ content, onReveal }: ScratchCardProps) => {
           <Canvas style={styles.canvas}>
             <Rect x={0} y={0} width={CARD_WIDTH} height={CARD_HEIGHT} color="#2a1838" />
             <Rect x={0} y={0} width={CARD_WIDTH} height={CARD_HEIGHT} color="#d4af3730" />
+            {grit.current.dots.map((dot, i) => (
+              <Circle key={`d${i}`} cx={dot.x} cy={dot.y} r={dot.r} color={dot.color} />
+            ))}
+            {grit.current.scratches.map((s, i) => (
+              <Line key={`s${i}`} p1={{ x: s.x1, y: s.y1 }} p2={{ x: s.x2, y: s.y2 }} color={s.color} strokeWidth={0.5} />
+            ))}
             <Group blendMode="clear">
               <Path
                 path={scratchPath.current}
