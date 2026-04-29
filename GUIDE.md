@@ -86,11 +86,17 @@
   - Spin con gesture (swipe) → animazione con inerzia → rallenta e si ferma                         
   - 1 spin gratuito al giorno, spin extra con rewarded ad oppure premium                              
    
-  ### 5. Gratta e Scopri                                                                              
-  - Card con superficie "grattabile" (scratch effect con touch gesture)                             
-  - Sotto: una frase del giorno, un consiglio, una mini-previsione                                    
-  - Meccanica: 3 card coperte, ne scegli 1, la gratti
-  - 1 gratis al giorno, extra con rewarded ad oppure premium                                          
+  ### 5. Gratta e Scopri — "La tua Pietra"
+  - Card con superficie "grattabile" (scratch effect con touch gesture, texture grit metallica)
+  - Sotto: la Pietra del giorno, personalizzata per il segno dell'utente
+  - Contenuto rivelato:
+    - Simbolo/emoji stilizzato della pietra
+    - Nome della pietra (es. "Ametista", "Quarzo Rosa", "Ossidiana")
+    - Proprieta' magiche (2-3 parole chiave, es. "protezione, intuizione, calma")
+    - Messaggio della pietra (frase personalizzata per il segno zodiacale dell'utente)
+  - Meccanica: 3 card coperte, ne scegli 1, la gratti con dissolvenza al 70%
+  - 1 gratis al giorno, extra con rewarded ad oppure premium
+  - Pool di ~30-40 pietre/cristalli, rotazione mensile                                          
                                                                                                       
   ### 6. Profilo e Streak
   - Il tuo segno e ascendente                                                                         
@@ -205,4 +211,28 @@
   ### Fase 6 — Espansione lingue (post-lancio)                                                        
   - Traduzione file i18n in inglese e spagnolo
   - Generazione contenuti oroscopo/tarocchi in 3 lingue                                               
-  - ASO localizzato per store internazionali   
+  - ASO localizzato per store internazionali
+
+  ## Idee di implementazione futura
+
+  ### Gratta e Scopri — Varianti alternative
+
+  Oltre alla modalita' "La tua Pietra" implementata per il lancio, queste varianti possono
+  essere aggiunte come modalita' aggiuntive o rotazioni stagionali:
+
+  **Rivelazione Cosmica**
+  Mini-lettura strutturata che rivela:
+  - Cristallo del giorno (nome + proprieta')
+  - Numero del destino (1-99)
+  - Colore cosmico
+  - Frase profetica breve personalizzata per il segno
+  Approccio "pacchetto fortuna" — piu' dati in una singola rivelazione.
+
+  **Sigillo del Giorno**
+  Simbolo mistico con significato:
+  - Simbolo/runa decorativo
+  - Nome del sigillo (es. "Sigillo della Trasformazione")
+  - Significato (frase mistica)
+  - Elemento associato (fuoco, acqua, terra, aria)
+  - Consiglio pratico legato al sigillo
+  Approccio "collezionabile mistico" — crea retention attraverso la scoperta di sigilli unici.   
