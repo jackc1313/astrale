@@ -91,7 +91,7 @@ export default function DiscoverScreen() {
               <>
                 <Body style={styles.instruction}>{t("discover.scratch.choose")}</Body>
                 <ScratchSelector
-                  count={scratch.stones.length || 3}
+                  count={3}
                   onSelect={handleScratchSelect}
                 />
               </>
@@ -99,7 +99,7 @@ export default function DiscoverScreen() {
               <View style={styles.scratchCardWrapper}>
                 <Body style={styles.instruction}>{t("discover.scratch.scratchIt")}</Body>
                 <ScratchCard
-                  stone={scratch.stones[scratch.selectedIndex] ?? { name: "", emoji: "", properties: "", message: "" }}
+                  stone={scratch.selectedStone ?? { name: "", icon: "", properties: "", message: "" }}
                   onReveal={scratch.reveal}
                 />
                 {scratch.isRevealed && (

@@ -50,53 +50,34 @@ const getStoneMessage = (stone: StoneReading, sign: string): string => {
 };
 
 export const useScratch = () => {
-  const [stones, setStones] = useState<StoneReading[]>([]);
+  const [selectedStone, setSelectedStone] = useState<StoneReading | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   const todayStr = today();
   const usage = storageService.getDailyUsage(todayStr);
   const [hasScratchedToday, setHasScratchedToday] = useState(usage.scratchUsed);
 
-  useEffect(() => {
+  const pickRandomStone = (): StoneReading => {
     const profile = storageService.getUserProfile();
     const sign = profile?.zodiacSign ?? "aries";
-
-    const cacheKey = `${CACHE_KEY_PREFIX}.${todayStr}`;
-    const cached = storage.getString(cacheKey);
-
-    if (cached) {
-      setStones(JSON.parse(cached) as StoneReading[]);
-      setIsLoading(false);
-      return;
-    }
-
-    // Pick 3 random stones for today using date as seed
-    const seed = todayStr.split("-").reduce((a, b) => a + parseInt(b), 0);
-    const shuffled = [...STONES].sort((a, b) => {
-      const ha = (a.name.charCodeAt(0) * seed) % 100;
-      const hb = (b.name.charCodeAt(0) * seed) % 100;
-      return ha - hb;
-    });
-
-    const picked: StoneReading[] = shuffled.slice(0, 3).map((stone) => ({
+    const randomIndex = Math.floor(Math.random() * STONES.length);
+    const stone = STONES[randomIndex];
+    return {
       ...stone,
       message: getStoneMessage(stone, sign),
-    }));
+    };
+  };
 
-    storage.set(cacheKey, JSON.stringify(picked));
-    setStones(picked);
-    setIsLoading(false);
-  }, [todayStr]);
-
-  const selectCard = (index: number) => { setSelectedIndex(index); };
+  const selectCard = (index: number) => {
+    setSelectedIndex(index);
+    setSelectedStone(pickRandomStone());
+  };
 
   const reveal = () => {
     setIsRevealed(true);
-    const stone = stones[selectedIndex ?? 0];
-    if (stone) {
-      storageService.addReadingEntry('scratch', `${stone.name} — ${stone.properties}`);
+    if (selectedStone) {
+      storageService.addReadingEntry('scratch', `${selectedStone.name} — ${selectedStone.properties}`);
     }
     if (!hasScratchedToday) {
       setHasScratchedToday(true);
@@ -105,10 +86,14 @@ export const useScratch = () => {
     }
   };
 
-  const reset = () => { setSelectedIndex(null); setIsRevealed(false); };
+  const reset = () => {
+    setSelectedIndex(null);
+    setSelectedStone(null);
+    setIsRevealed(false);
+  };
 
   return {
-    stones, selectedIndex, isRevealed, isLoading, hasScratchedToday,
+    selectedStone, selectedIndex, isRevealed, isLoading: false, hasScratchedToday,
     selectCard, reveal, reset,
   };
 };
