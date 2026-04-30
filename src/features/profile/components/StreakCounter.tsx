@@ -34,7 +34,7 @@ export const StreakCounter = ({ currentStreak, longestStreak }: StreakCounterPro
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  count: { fontSize: 32, color: colors.gold },
+  count: { fontSize: 32, lineHeight: 42, color: colors.gold },
   label: { fontSize: 13, opacity: 0.7 },
   longest: { fontSize: 11, opacity: 0.5, marginTop: spacing.sm },
 });
