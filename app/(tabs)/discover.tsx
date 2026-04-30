@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl, paddingTop: spacing.lg, gap: spacing.lg },
   wheelContent: { alignItems: "center", gap: spacing.xl, paddingTop: spacing.lg, paddingBottom: spacing["5xl"] },
   wheelWrapper: { alignItems: "center", position: "relative" },
-  scratchContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"] },
-  scratchCardWrapper: { alignItems: "center", gap: spacing.lg },
+  scratchContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"], flexGrow: 1 },
+  scratchCardWrapper: { flex: 1, alignItems: "center", justifyContent: "center", gap: spacing.lg },
   instruction: { fontSize: 14, opacity: 0.5 },
   bannerContainer: { alignItems: "center" },
 });
