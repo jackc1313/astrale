@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Body, Title } from '@shared/components';
 import { Card } from '@shared/components';
@@ -16,7 +17,7 @@ export const StreakCounter = ({ currentStreak, longestStreak }: StreakCounterPro
   return (
     <Card variant="gold">
       <View style={styles.row}>
-        <Body style={styles.flame}>{'\uD83D\uDD25'}</Body>
+        <MaterialCommunityIcons name="fire" size={36} color={colors.gold} />
         <View>
           <Title style={styles.count}>{currentStreak}</Title>
           <Body style={styles.label}>
@@ -33,7 +34,6 @@ export const StreakCounter = ({ currentStreak, longestStreak }: StreakCounterPro
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  flame: { fontSize: 36 },
   count: { fontSize: 32, color: colors.gold },
   label: { fontSize: 13, opacity: 0.7 },
   longest: { fontSize: 11, opacity: 0.5, marginTop: spacing.sm },
