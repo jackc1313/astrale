@@ -1,4 +1,5 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as Notifications from 'expo-notifications';
@@ -47,7 +48,7 @@ export default function NotificationsScreen() {
       <View style={styles.container}>
         <ProgressBar steps={4} currentStep={4} />
         <View style={styles.content}>
-          <Text style={styles.bellIcon}>{'\uD83D\uDD14'}</Text>
+          <MaterialCommunityIcons name="bell-outline" size={56} color={colors.gold} style={styles.bellIcon} />
           <Title style={styles.title}>{t('onboarding.notifications.title')}</Title>
           <Body style={styles.subtitle}>{t('onboarding.notifications.subtitle')}</Body>
         </View>
