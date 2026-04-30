@@ -55,10 +55,10 @@ export const StarsIndicator = ({ stars, unlocked, onUnlock }: StarsIndicatorProp
 };
 
 const styles = StyleSheet.create({
-  container: { flexDirection: "row", gap: spacing.sm },
-  lockedContainer: { flexDirection: "row", gap: spacing.sm, position: "relative" },
+  container: { flexDirection: "row", flexWrap: "wrap", gap: spacing.md },
+  lockedContainer: { flexDirection: "row", flexWrap: "wrap", gap: spacing.md, position: "relative" },
   card: {
-    flex: 1,
+    flexBasis: "47%", flexGrow: 1,
     backgroundColor: colors.goldMuted,
     borderWidth: 1,
     borderColor: colors.goldBorder,
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   cardLabel: { color: colors.gold },
-  stars: { color: colors.gold, fontSize: 18 },
+  stars: { color: colors.gold, fontSize: 18, textAlign: "center" },
   locked: { fontSize: 18, opacity: 0.5 },
   unlockOverlay: {
     position: "absolute",
