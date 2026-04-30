@@ -6,15 +6,15 @@ import type { WheelItem } from "../types";
 const CACHE_KEY_PREFIX = "wheel.cache.v2";
 const today = (): string => new Date().toISOString().split("T")[0];
 
-const CATEGORIES: { category: string; emoji: string }[] = [
-  { category: "Amore", emoji: "\u2764\uFE0F" },
-  { category: "Lavoro", emoji: "\u2B50" },
-  { category: "Fortuna", emoji: "\uD83C\uDF40" },
-  { category: "Salute", emoji: "\uD83D\uDC9A" },
-  { category: "Energia", emoji: "\u26A1" },
-  { category: "Spirito", emoji: "\uD83D\uDD2E" },
-  { category: "Relazioni", emoji: "\uD83E\uDD1D" },
-  { category: "Crescita", emoji: "\uD83C\uDF31" },
+const CATEGORIES: { category: string; icon: string }[] = [
+  { category: "Amore", icon: "heart-outline" },
+  { category: "Lavoro", icon: "briefcase-outline" },
+  { category: "Fortuna", icon: "clover" },
+  { category: "Salute", icon: "spa-outline" },
+  { category: "Energia", icon: "lightning-bolt" },
+  { category: "Spirito", icon: "meditation" },
+  { category: "Relazioni", icon: "account-group-outline" },
+  { category: "Crescita", icon: "sprout" },
 ];
 
 const TIPS: Record<string, string[]> = {
@@ -97,7 +97,7 @@ const generateWheelItems = (dateStr: string): WheelItem[] => {
     return {
       index: i,
       category: cat.category,
-      emoji: cat.emoji,
+      icon: cat.icon,
       label: cat.category,
       fullText: msgs[msgIndex],
       tip: tips[tipIndex],

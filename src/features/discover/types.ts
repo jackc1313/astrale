@@ -3,7 +3,7 @@ export type DiscoverTab = "wheel" | "scratch";
 export type WheelItem = {
   index: number;
   category: string;
-  emoji: string;
+  icon: string;
   label: string;
   fullText: string;
   tip: string;
@@ -12,7 +12,7 @@ export type WheelItem = {
 
 export type StoneReading = {
   name: string;
-  emoji: string;
+  icon: string;
   properties: string;
   message: string;
 };

@@ -1,5 +1,6 @@
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Body, Title } from '@shared/components';
 import { colors, radius, spacing } from '@shared/theme';
@@ -18,7 +19,12 @@ export const BadgeGrid = ({ badges }: BadgeGridProps) => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>
         {badges.map((badge) => (
           <View key={badge.id} style={[styles.badge, badge.earned ? styles.earned : styles.notEarned]}>
-            <Body style={[styles.icon, !badge.earned && styles.iconGrey]}>{badge.icon}</Body>
+            <MaterialCommunityIcons
+              name={badge.icon as any}
+              size={28}
+              color={badge.earned ? colors.gold : colors.whiteDim}
+              style={!badge.earned ? styles.iconGrey : undefined}
+            />
             <Body style={[styles.name, !badge.earned && styles.nameGrey]}>{t(badge.nameKey)}</Body>
             {!badge.earned && (
               <Body style={styles.progress}>
@@ -41,7 +47,6 @@ const styles = StyleSheet.create({
   },
   earned: { backgroundColor: colors.goldMuted, borderWidth: 1, borderColor: colors.goldBorder },
   notEarned: { backgroundColor: colors.whiteOverlay, borderWidth: 1, borderColor: colors.whiteBorder },
-  icon: { fontSize: 28 },
   iconGrey: { opacity: 0.3 },
   name: { fontSize: 10, color: colors.gold, textAlign: 'center', fontFamily: 'Inter-Medium' },
   nameGrey: { color: colors.whiteDim },

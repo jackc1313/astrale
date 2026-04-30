@@ -1,5 +1,6 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { Card, Body, Label } from "@shared/components";
 import { colors, radius, spacing } from "@shared/theme";
@@ -14,7 +15,7 @@ export const WheelResult = ({ result }: WheelResultProps) => {
     <Animated.View entering={FadeInUp.duration(500)}>
       <Card variant="gold" style={styles.card}>
         <View style={styles.header}>
-          <Text style={styles.emoji}>{result.emoji}</Text>
+          <MaterialCommunityIcons name={result.icon as any} size={24} color={colors.gold} />
           <Body style={styles.category}>{result.category}</Body>
         </View>
 

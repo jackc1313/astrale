@@ -43,10 +43,10 @@ export default function ProfileScreen() {
   const selectedEntries = selectedDate ? getEntriesForDate(selectedDate) : [];
 
   const badges: BadgeInfo[] = [
-    { id: '7_days', nameKey: 'badges.7_days', icon: '\uD83D\uDD25', current: Math.min(streak.currentStreak, 7), total: 7, earned: streak.badges.includes('7_days') },
-    { id: '30_days', nameKey: 'badges.30_days', icon: '\u2B50', current: Math.min(streak.currentStreak, 30), total: 30, earned: streak.badges.includes('30_days') },
-    { id: '100_days', nameKey: 'badges.100_days', icon: '\uD83D\uDC8E', current: Math.min(streak.currentStreak, 100), total: 100, earned: streak.badges.includes('100_days') },
-    { id: 'all_arcana', nameKey: 'badges.all_arcana', icon: '\u2721', current: collectedCards.length, total: 22, earned: streak.badges.includes('all_arcana') },
+    { id: '7_days', nameKey: 'badges.7_days', icon: 'fire', current: Math.min(streak.currentStreak, 7), total: 7, earned: streak.badges.includes('7_days') },
+    { id: '30_days', nameKey: 'badges.30_days', icon: 'star-four-points', current: Math.min(streak.currentStreak, 30), total: 30, earned: streak.badges.includes('30_days') },
+    { id: '100_days', nameKey: 'badges.100_days', icon: 'diamond-stone', current: Math.min(streak.currentStreak, 100), total: 100, earned: streak.badges.includes('100_days') },
+    { id: 'all_arcana', nameKey: 'badges.all_arcana', icon: 'cards', current: collectedCards.length, total: 22, earned: streak.badges.includes('all_arcana') },
   ];
 
   return (

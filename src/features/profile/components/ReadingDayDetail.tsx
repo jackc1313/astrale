@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Body, Card } from '@shared/components';
 import { colors, spacing } from '@shared/theme';
@@ -10,11 +11,11 @@ type ReadingDayDetailProps = {
   entries: ReadingEntry[];
 };
 
-const TYPE_ICONS: Record<string, string> = {
-  horoscope: '\u2609',
-  tarot: '\u2721',
-  wheel: '\u2728',
-  scratch: '\u2B50',
+const TYPE_ICONS: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
+  horoscope: 'star-four-points-outline',
+  tarot: 'cards-outline',
+  wheel: 'compass-outline',
+  scratch: 'diamond-stone',
 };
 
 export const ReadingDayDetail = ({ date, entries }: ReadingDayDetailProps) => {
@@ -31,7 +32,11 @@ export const ReadingDayDetail = ({ date, entries }: ReadingDayDetailProps) => {
       {entries.map((entry, i) => (
         <Card key={i} variant="subtle" style={styles.entry}>
           <View style={styles.row}>
-            <Body style={styles.icon}>{TYPE_ICONS[entry.type] ?? ''}</Body>
+            <MaterialCommunityIcons
+              name={TYPE_ICONS[entry.type] ?? 'circle'}
+              size={20}
+              color={colors.gold}
+            />
             <View style={styles.content}>
               <Body style={styles.type}>{t(`history.${entry.type}`)}</Body>
               <Body style={styles.summary} numberOfLines={2}>{entry.summary}</Body>
@@ -48,7 +53,6 @@ const styles = StyleSheet.create({
   empty: { opacity: 0.4, textAlign: 'center', marginTop: spacing.lg },
   entry: { padding: spacing.md },
   row: { flexDirection: 'row', gap: spacing.md, alignItems: 'center' },
-  icon: { fontSize: 20 },
   content: { flex: 1, gap: 2 },
   type: { fontSize: 12, fontFamily: 'Inter-SemiBold', color: colors.gold },
   summary: { fontSize: 12, opacity: 0.7 },

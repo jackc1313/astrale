@@ -1,5 +1,6 @@
 import { useRef, useState, useCallback } from "react";
-import { StyleSheet, View, Dimensions, Text } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Canvas, Path, Skia, Rect, Group, Circle, Line } from "@shopify/react-native-skia";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, { runOnJS, useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
@@ -115,7 +116,7 @@ export const ScratchCard = ({ stone, onReveal }: ScratchCardProps) => {
 
   const stoneContent = (
     <>
-      <Text style={styles.stoneEmoji}>{stone.emoji}</Text>
+      <MaterialCommunityIcons name={stone.icon as any} size={32} color={colors.gold} />
       <Body style={styles.stoneName}>{stone.name}</Body>
       <Label style={styles.stoneProperties}>{stone.properties}</Label>
       <Body style={styles.stoneMessage}>{stone.message}</Body>
