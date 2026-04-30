@@ -46,6 +46,7 @@ export default function HomeScreen() {
   const [unlockedSections, setUnlockedSections] = useState<Record<HoroscopeSection, boolean>>({
     love: isPremium || freeSection === "love",
     work: isPremium || freeSection === "work",
+    health: isPremium || freeSection === "health",
     luck: isPremium || freeSection === "luck",
   });
   const [affinityUnlocked, setAffinityUnlocked] = useState(isPremium);
@@ -130,7 +131,7 @@ export default function HomeScreen() {
               onUnlock={() => {}}
             />
 
-            {(["love", "work", "luck"] as HoroscopeSection[]).map(
+            {(["love", "work", "health", "luck"] as HoroscopeSection[]).map(
               (section) => (
                 <DetailSection
                   key={section}

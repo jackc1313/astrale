@@ -22,6 +22,7 @@ export const StarsIndicator = ({ stars, unlocked, onUnlock }: StarsIndicatorProp
   const sections: { key: keyof Stars; label: string }[] = [
     { key: "love", label: t("horoscope.love") },
     { key: "work", label: t("horoscope.work") },
+    { key: "health", label: t("horoscope.health") },
     { key: "luck", label: t("horoscope.luck") },
   ];
 

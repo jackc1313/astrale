@@ -29,8 +29,9 @@ Rispondi SOLO con questo JSON:
   "general": "testo oroscopo generale",
   "love": "testo oroscopo amore",
   "work": "testo oroscopo lavoro",
+  "health": "testo oroscopo salute e benessere",
   "luck": "testo oroscopo fortuna",
-  "stars": { "love": 4, "work": 3, "luck": 5 },
+  "stars": { "love": 4, "work": 3, "health": 4, "luck": 5 },
   "luckyNumber": 7,
   "luckyColor": "blu",
   "compatibility": "scorpio"

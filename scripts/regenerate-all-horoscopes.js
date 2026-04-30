@@ -1,6 +1,6 @@
 /**
- * One-shot: generate missing horoscopes and upload to Firestore.
- * Usage: GEMINI_API_KEY=xxx node scripts/fix-missing-horoscopes.js
+ * Regenerate ALL horoscopes with health field.
+ * Overwrites existing data. Usage: GEMINI_API_KEY=xxx node scripts/regenerate-all-horoscopes.js
  */
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -34,7 +34,7 @@ async function generateJSON(prompt, retries = 3) {
       return JSON.parse(result.response.text());
     } catch (err) {
       console.warn(`  Retry ${i+1}/${retries}: ${err.message?.slice(0,80)}`);
-      await delay(10000 * (i + 1));
+      await delay(15000 * (i + 1));
     }
   }
   throw new Error("Failed after retries");
@@ -49,21 +49,10 @@ async function main() {
     dates.push(d.toISOString().split("T")[0]);
   }
 
-  // Also include past dates that might be missing
-  for (let i = 1; i <= 3; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    dates.unshift(d.toISOString().split("T")[0]);
-  }
-
-  let generated = 0, skipped = 0, failed = 0;
+  let generated = 0, failed = 0;
 
   for (const date of dates) {
     for (const sign of SIGNS) {
-      const ref = db.doc(`horoscopes/${date}/signs/${sign}`);
-      const snap = await ref.get();
-      if (snap.exists) { continue; }
-
       console.log(`Generating ${date}/${sign}...`);
       try {
         const prompt = `Sei un astrologo esperto. Genera l'oroscopo giornaliero per il segno ${SIGN_NAMES[sign]} per il giorno ${date}.
@@ -71,7 +60,7 @@ REGOLE: Scrivi in italiano. Tono: positivo ma non banale, specifico, mai catastr
 Rispondi SOLO con: {"general":"...","love":"...","work":"...","health":"...","luck":"...","stars":{"love":4,"work":3,"health":4,"luck":5},"luckyNumber":7,"luckyColor":"blu","compatibility":"scorpio"}`;
 
         const data = await generateJSON(prompt);
-        await ref.set(data);
+        await db.doc(`horoscopes/${date}/signs/${sign}`).set(data);
         console.log(`  OK ${date}/${sign}`);
         generated++;
         await delay(5000);
@@ -82,7 +71,7 @@ Rispondi SOLO con: {"general":"...","love":"...","work":"...","health":"...","lu
     }
   }
 
-  console.log(`\nDone. Generated: ${generated}, Skipped: ${skipped}, Failed: ${failed}`);
+  console.log(`\nDone. Generated: ${generated}, Failed: ${failed}`);
   process.exit(0);
 }
 
