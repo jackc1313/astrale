@@ -6,6 +6,7 @@ import { ScreenContainer, Body, Button } from "@shared/components";
 import { colors, spacing } from "@shared/theme";
 import { useRewardedAd } from "@services/ads";
 import { usePremium } from '@services/premium';
+import { BannerAd, BannerAdSize, TestIds } from "react-native-google-mobile-ads";
 import { useTarot } from "@features/tarot/hooks";
 import {
   TarotFan,
@@ -67,7 +68,7 @@ export default function TarotScreen() {
   const showResult = isDrawn || (mode === "daily" && alreadyDrawnToday && drawnCards.length > 0);
 
   return (
-    <ScreenContainer>
+    <ScreenContainer edges={["top"]}>
       <View style={styles.container}>
         <ModeSelector
           selected={mode}
@@ -97,6 +98,11 @@ export default function TarotScreen() {
           <Button title={t("common.back")} variant="ghost" onPress={reset} style={styles.resetButton} />
         )}
       </View>
+      {!isPremium && (
+        <View style={styles.bannerContainer}>
+          <BannerAd unitId={TestIds.ADAPTIVE_BANNER} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
+        </View>
+      )}
     </ScreenContainer>
   );
 }
@@ -106,4 +112,5 @@ const styles = StyleSheet.create({
   fanSection: { flex: 1, justifyContent: "center", alignItems: "center" },
   instruction: { fontSize: 14, opacity: 0.5, marginBottom: spacing.lg },
   resetButton: { marginBottom: spacing.lg },
+  bannerContainer: { alignItems: "center" },
 });

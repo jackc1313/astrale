@@ -6,6 +6,7 @@ import { ScreenContainer, Body, Button } from "@shared/components";
 import { spacing } from "@shared/theme";
 import { useRewardedAd } from "@services/ads";
 import { usePremium } from '@services/premium';
+import { BannerAd, BannerAdSize, TestIds } from "react-native-google-mobile-ads";
 import { useWheel, useScratch } from "@features/discover/hooks";
 import {
   DiscoverTabs,
@@ -43,7 +44,7 @@ export default function DiscoverScreen() {
   };
 
   return (
-    <ScreenContainer>
+    <ScreenContainer edges={["top"]}>
       <View style={styles.container}>
         <DiscoverTabs selected={activeTab} onSelect={setActiveTab} />
 
@@ -113,15 +114,21 @@ export default function DiscoverScreen() {
           </ScrollView>
         )}
       </View>
+      {!isPremium && (
+        <View style={styles.bannerContainer}>
+          <BannerAd unitId={TestIds.ADAPTIVE_BANNER} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
+        </View>
+      )}
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl, paddingTop: spacing.lg, gap: spacing.lg },
-  wheelContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"] },
+  wheelContent: { alignItems: "center", gap: spacing.xl, paddingTop: spacing.lg, paddingBottom: spacing["5xl"] },
   wheelWrapper: { alignItems: "center", position: "relative" },
   scratchContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"] },
   scratchCardWrapper: { alignItems: "center", gap: spacing.lg },
   instruction: { fontSize: 14, opacity: 0.5 },
+  bannerContainer: { alignItems: "center" },
 });
