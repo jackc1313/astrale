@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 
 import { Card, Body, Title, Label } from "@shared/components";
 import { colors, spacing } from "@shared/theme";
-import { getZodiacSignById, type ZodiacSignId } from "@shared/utils/zodiac";
+import { getZodiacSignById, getZodiacIconName, type ZodiacSignId } from "@shared/utils/zodiac";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type AffinityCardProps = {
   compatibility: ZodiacSignId;
@@ -37,7 +38,11 @@ export const AffinityCard = ({ compatibility, unlocked, onUnlock }: AffinityCard
         <Title style={styles.title}>{t("horoscope.affinity")}</Title>
         <Label>{t("horoscope.affinityDesc")}</Label>
         <View style={styles.signRow}>
-          <Body style={styles.signSymbol}>{sign.symbol}</Body>
+          <MaterialCommunityIcons
+            name={getZodiacIconName(compatibility) as any}
+            size={32}
+            color={colors.gold}
+          />
           <Body style={styles.signName}>{t(sign.nameKey)}</Body>
         </View>
       </Card>

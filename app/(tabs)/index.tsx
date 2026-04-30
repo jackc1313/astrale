@@ -9,7 +9,8 @@ import { colors, spacing } from "@shared/theme";
 import { storageService } from "@services/storage";
 import { useRewardedAd } from "@services/ads";
 import { usePremium } from '@services/premium';
-import { getZodiacSignById } from "@shared/utils/zodiac";
+import { getZodiacSignById, getZodiacIconName } from "@shared/utils/zodiac";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useHoroscope } from "@features/horoscope/hooks";
 import {
   HoroscopeCard,
@@ -105,9 +106,11 @@ export default function HomeScreen() {
           </View>
           <Pressable onPress={() => router.push("/profile")}>
             <View style={styles.avatar}>
-              <Body style={styles.avatarText}>
-                {sign?.symbol ?? "\u2609"}
-              </Body>
+              <MaterialCommunityIcons
+                name={sign ? getZodiacIconName(sign.id) as any : "star-four-points"}
+                size={18}
+                color={colors.gold}
+              />
             </View>
           </Pressable>
         </View>

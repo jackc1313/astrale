@@ -1,11 +1,12 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ScreenContainer, Title, Body, Button, ProgressBar } from '@shared/components';
-import { spacing } from '@shared/theme';
-import { getZodiacSign, getZodiacSignById } from '@shared/utils/zodiac';
+import { colors, spacing } from '@shared/theme';
+import { getZodiacSign, getZodiacSignById, getZodiacIconName } from '@shared/utils/zodiac';
 import { useOnboardingContext } from './_layout';
 
 export default function SignScreen() {
@@ -46,7 +47,11 @@ export default function SignScreen() {
         </View>
         {sign && (
           <View style={styles.result}>
-            <Text style={styles.signEmoji}>{sign.emoji}</Text>
+            <MaterialCommunityIcons
+              name={getZodiacIconName(sign.id) as any}
+              size={48}
+              color={colors.gold}
+            />
             <Body style={styles.signName}>{t(sign.nameKey)}</Body>
           </View>
         )}

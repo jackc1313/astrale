@@ -2,14 +2,15 @@ import { StyleSheet, View, Pressable } from 'react-native';
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { colors, spacing } from '@shared/theme';
 import { Body } from '@shared/components';
 
-const TAB_ICONS: Record<string, string> = {
-  index: '\u2609',
-  tarot: '\u2721',
-  discover: '\u2728',
+const TAB_ICONS: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
+  index: 'star-four-points-outline',
+  tarot: 'cards-outline',
+  discover: 'compass-outline',
 };
 
 const CustomTabBar = ({ state, descriptors, navigation }: any) => {
@@ -21,6 +22,7 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;
         const label = (options.title ?? route.name) as string;
+        const iconName = TAB_ICONS[route.name] ?? 'circle';
 
         return (
           <Pressable
@@ -32,14 +34,11 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
             }}
             style={styles.tab}
           >
-            <Body
-              style={[
-                styles.tabIcon,
-                { color: isFocused ? colors.gold : colors.whiteDim },
-              ]}
-            >
-              {TAB_ICONS[route.name] ?? '\u25CF'}
-            </Body>
+            <MaterialCommunityIcons
+              name={iconName}
+              size={22}
+              color={isFocused ? colors.gold : colors.whiteDim}
+            />
             <Body
               style={[
                 styles.tabLabel,
@@ -79,6 +78,5 @@ const styles = StyleSheet.create({
     paddingTop: spacing.sm,
   },
   tab: { flex: 1, alignItems: 'center', gap: 2 },
-  tabIcon: { fontSize: 22 },
   tabLabel: { fontSize: 10, fontFamily: 'Inter-Medium' },
 });

@@ -1,9 +1,10 @@
-import { StyleSheet, Pressable, View, Text } from 'react-native';
+import { StyleSheet, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { colors, radius, spacing } from '@shared/theme';
 import { Body } from '@shared/components';
-import { zodiacSigns, type ZodiacSignId } from '@shared/utils/zodiac';
+import { zodiacSigns, getZodiacIconName, type ZodiacSignId } from '@shared/utils/zodiac';
 
 type ZodiacGridProps = {
   selected: ZodiacSignId | null;
@@ -23,7 +24,11 @@ export const ZodiacGrid = ({ selected, onSelect }: ZodiacGridProps) => {
             onPress={() => onSelect(sign.id)}
             style={[styles.cell, isSelected ? styles.cellSelected : styles.cellDefault]}
           >
-            <Text style={styles.symbol}>{sign.emoji}</Text>
+            <MaterialCommunityIcons
+              name={getZodiacIconName(sign.id) as any}
+              size={20}
+              color={isSelected ? colors.gold : colors.pearlWhite}
+            />
             <Body style={styles.name}>{t(sign.nameKey)}</Body>
           </Pressable>
         );
@@ -44,6 +49,5 @@ const styles = StyleSheet.create({
   cellSelected: {
     backgroundColor: colors.goldMuted, borderWidth: 1, borderColor: colors.goldBorder,
   },
-  symbol: { fontSize: 20 },
   name: { fontSize: 9 },
 });

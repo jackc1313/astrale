@@ -56,3 +56,5 @@ export const getZodiacSignFromDate = (dateString: string): ZodiacSignId => {
   const date = new Date(dateString);
   return getZodiacSign(date.getMonth() + 1, date.getDate());
 };
+
+export const getZodiacIconName = (id: ZodiacSignId): string => `zodiac-${id}`;

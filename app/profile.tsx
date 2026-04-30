@@ -8,7 +8,8 @@ import { colors, spacing } from '@shared/theme';
 import { storageService } from '@services/storage';
 import { usePremium } from '@services/premium';
 import { PremiumBanner } from '@features/premium/components';
-import { getZodiacSignById } from '@shared/utils/zodiac';
+import { getZodiacSignById, getZodiacIconName } from '@shared/utils/zodiac';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useReadingHistory, useNotifications } from '@features/profile/hooks';
 import {
   StreakCounter,
@@ -53,7 +54,11 @@ export default function ProfileScreen() {
 
         {sign && (
           <View style={styles.signSection}>
-            <Body style={styles.signSymbol}>{sign.symbol}</Body>
+            <MaterialCommunityIcons
+              name={getZodiacIconName(sign.id) as any}
+              size={48}
+              color={colors.gold}
+            />
             <Body style={styles.signName}>{t(sign.nameKey)}</Body>
             {profile?.ascendant && (
               <Body style={styles.ascendant}>Asc: {t(getZodiacSignById(profile.ascendant).nameKey)}</Body>
