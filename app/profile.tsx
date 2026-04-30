@@ -33,6 +33,11 @@ export default function ProfileScreen() {
   const { settings, updateSettings } = useNotifications();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
+  const handleLogout = () => {
+    storageService.clearAll();
+    router.replace('/(onboarding)/sign');
+  };
+
   const now = new Date();
   const daysWithEntries = getDaysWithEntries(now.getMonth() + 1, now.getFullYear());
   const selectedEntries = selectedDate ? getEntriesForDate(selectedDate) : [];
@@ -84,6 +89,10 @@ export default function ProfileScreen() {
         <NotificationSettings settings={settings} onUpdate={updateSettings} />
 
         {!isPremium && <PremiumBanner />}
+
+        <Pressable onPress={handleLogout} style={styles.logoutButton}>
+          <Body style={styles.logoutText}>Esci e ricomincia</Body>
+        </Pressable>
       </ScrollView>
     </ScreenContainer>
   );
@@ -98,4 +107,6 @@ const styles = StyleSheet.create({
   signName: { fontFamily: 'PlayfairDisplay-Bold', fontSize: 24, color: colors.pearlWhite },
   ascendant: { opacity: 0.6, fontSize: 14 },
   premiumButton: { marginTop: spacing.lg },
+  logoutButton: { alignItems: 'center', paddingVertical: spacing.lg, marginTop: spacing.xl },
+  logoutText: { color: '#ff4444', fontSize: 14 },
 });

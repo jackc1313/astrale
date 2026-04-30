@@ -5,6 +5,9 @@ import * as Notifications from 'expo-notifications';
 
 import { ScreenContainer, Title, Body, Button, ProgressBar } from '@shared/components';
 import { colors, spacing } from '@shared/theme';
+import { storageService } from '@services/storage';
+import { rescheduleAll } from '@services/notifications';
+import { DEFAULT_NOTIFICATION_SETTINGS } from '@features/profile/types';
 import { useOnboardingContext } from './_layout';
 
 export default function NotificationsScreen() {
@@ -14,10 +17,27 @@ export default function NotificationsScreen() {
 
   const handleEnable = async () => {
     await Notifications.requestPermissionsAsync();
-    finishOnboarding();
+
+    const settings = {
+      ...DEFAULT_NOTIFICATION_SETTINGS,
+      morningEnabled: true,
+      eveningEnabled: true,
+    };
+    storageService.setNotificationSettings(settings);
+    await rescheduleAll(settings);
+
+    completeOnboarding();
+    router.replace('/(tabs)');
   };
 
-  const finishOnboarding = () => {
+  const handleSkip = () => {
+    const settings = {
+      ...DEFAULT_NOTIFICATION_SETTINGS,
+      morningEnabled: false,
+      eveningEnabled: false,
+    };
+    storageService.setNotificationSettings(settings);
+
     completeOnboarding();
     router.replace('/(tabs)');
   };
@@ -33,7 +53,7 @@ export default function NotificationsScreen() {
         </View>
         <View style={styles.footer}>
           <Button title={t('onboarding.notifications.enable')} onPress={handleEnable} />
-          <Body onPress={finishOnboarding} style={styles.skipLink}>
+          <Body onPress={handleSkip} style={styles.skipLink}>
             {t('onboarding.notifications.skip')}
           </Body>
         </View>
