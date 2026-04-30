@@ -30,7 +30,7 @@ export default function SignScreen() {
       <View style={styles.container}>
         <ProgressBar steps={4} currentStep={1} />
         <View style={styles.header}>
-          <Title>{t('onboarding.sign.title')}</Title>
+          <Title style={styles.headerTitle}>{t('onboarding.sign.title')}</Title>
           <Body style={styles.subtitle}>{t('onboarding.sign.subtitle')}</Body>
         </View>
         <View style={styles.pickerWrapper}>
@@ -49,7 +49,7 @@ export default function SignScreen() {
           <View style={styles.result}>
             <MaterialCommunityIcons
               name={getZodiacIconName(sign.id) as any}
-              size={48}
+              size={90}
               color={colors.gold}
             />
             <Body style={styles.signName}>{t(sign.nameKey)}</Body>
@@ -69,12 +69,13 @@ export default function SignScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl },
-  header: { marginTop: spacing['3xl'], gap: spacing.sm },
-  subtitle: { opacity: 0.6, fontSize: 11 },
+  header: { marginTop: spacing['4xl'], gap: spacing.sm },
+  headerTitle: { fontSize: 24, lineHeight: 34 },
+  subtitle: { opacity: 0.6, fontSize: 14 },
   pickerWrapper: { alignItems: 'center', marginTop: spacing.lg },
   picker: { height: 150, width: '100%' },
-  result: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
+  result: { alignItems: 'center', paddingTop: spacing['4xl'], paddingBottom: spacing['4xl'], gap: spacing.md },
   signEmoji: { fontSize: 48 },
-  signName: { fontFamily: 'PlayfairDisplay-Bold', fontSize: 20 },
+  signName: { fontFamily: 'PlayfairDisplay-Bold', fontSize: 28, lineHeight: 40, color: colors.pearlWhite },
   footer: { marginTop: 'auto' },
 });

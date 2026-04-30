@@ -22,7 +22,7 @@ export default function AscendantScreen() {
       <View style={styles.container}>
         <ProgressBar steps={4} currentStep={2} />
         <View style={styles.header}>
-          <Title>{t('onboarding.ascendant.title')}</Title>
+          <Title style={styles.headerTitle}>{t('onboarding.ascendant.title')}</Title>
           <Body style={styles.subtitle}>{t('onboarding.ascendant.subtitle')}</Body>
         </View>
         <Body style={styles.description}>{t('onboarding.ascendant.description')}</Body>
@@ -43,9 +43,10 @@ export default function AscendantScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl },
-  header: { marginTop: spacing['3xl'], gap: spacing.sm },
-  subtitle: { opacity: 0.6, fontSize: 11 },
-  description: { marginTop: spacing.lg, marginBottom: spacing.xl, opacity: 0.7, fontSize: 12 },
-  skipLink: { textAlign: 'center', color: colors.gold, fontSize: 11, marginTop: spacing.md, opacity: 0.7 },
+  header: { marginTop: spacing['4xl'], gap: spacing.sm },
+  headerTitle: { fontSize: 24, lineHeight: 34 },
+  subtitle: { opacity: 0.6, fontSize: 14 },
+  description: { marginTop: spacing.lg, marginBottom: spacing.xl, opacity: 0.7, fontSize: 13 },
+  skipLink: { textAlign: 'center', color: colors.gold, fontSize: 12, marginTop: spacing['5xl'], opacity: 0.7 },
   footer: { marginTop: 'auto' },
 });

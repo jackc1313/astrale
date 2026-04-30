@@ -25,7 +25,7 @@ export default function InterestsScreen() {
       <View style={styles.container}>
         <ProgressBar steps={4} currentStep={3} />
         <View style={styles.header}>
-          <Title>{t('onboarding.interests.title')}</Title>
+          <Title style={styles.headerTitle}>{t('onboarding.interests.title')}</Title>
           <Body style={styles.subtitle}>{t('onboarding.interests.subtitle')}</Body>
         </View>
         <View style={styles.cards}>
@@ -54,8 +54,9 @@ export default function InterestsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl },
-  header: { marginTop: spacing['3xl'], gap: spacing.sm },
-  subtitle: { opacity: 0.6, fontSize: 11 },
+  header: { marginTop: spacing['4xl'], gap: spacing.sm },
+  headerTitle: { fontSize: 24, lineHeight: 34 },
+  subtitle: { opacity: 0.6, fontSize: 14 },
   cards: { marginTop: spacing.xl, gap: spacing.md },
   footer: { marginTop: 'auto' },
 });

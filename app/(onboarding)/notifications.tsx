@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl },
   content: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md },
   bellIcon: { fontSize: 56, marginBottom: spacing.xl, lineHeight: 70 },
-  title: { fontSize: 20, textAlign: 'center' },
-  subtitle: { fontSize: 12, opacity: 0.6, textAlign: 'center', lineHeight: 20, maxWidth: 220 },
+  title: { fontSize: 24, textAlign: 'center' },
+  subtitle: { fontSize: 14, opacity: 0.6, textAlign: 'center', lineHeight: 22, maxWidth: 260 },
   footer: { gap: spacing.md, alignItems: 'center' },
   skipLink: { color: colors.pearlWhite, fontSize: 12, opacity: 0.5 },
 });
