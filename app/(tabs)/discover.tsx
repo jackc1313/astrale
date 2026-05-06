@@ -27,19 +27,12 @@ export default function DiscoverScreen() {
   const wheel = useWheel();
   const scratch = useScratch();
 
-  const handleSpinPress = async () => {
-    if (wheel.hasSpunToday && !isPremium) {
-      const rewarded = await showAd();
-      if (!rewarded) return;
-    }
+  // No ad gates (monetization disabled for launch)
+  const handleSpinPress = () => {
     wheel.startSpin();
   };
 
-  const handleScratchSelect = async (index: number) => {
-    if (scratch.hasScratchedToday && !isPremium) {
-      const rewarded = await showAd();
-      if (!rewarded) return;
-    }
+  const handleScratchSelect = (index: number) => {
     scratch.selectCard(index);
   };
 
@@ -68,7 +61,7 @@ export default function DiscoverScreen() {
               <WheelResult result={wheel.result} />
             ) : (
               <Button
-                title={wheel.hasSpunToday ? t("discover.wheel.unlockSpin") : t("discover.wheel.spin")}
+                title={t("discover.wheel.spin")}
                 onPress={handleSpinPress}
                 disabled={wheel.isSpinning || wheel.isLoading}
               />
@@ -76,7 +69,7 @@ export default function DiscoverScreen() {
 
             {wheel.result && (
               <Button
-                title={wheel.hasSpunToday ? t("discover.wheel.unlockSpin") : t("discover.wheel.spinAgain")}
+                title={t("discover.wheel.spinAgain")}
                 onPress={handleSpinPress}
                 variant="ghost"
               />
@@ -104,7 +97,7 @@ export default function DiscoverScreen() {
                 />
                 {scratch.isRevealed && (
                   <Button
-                    title={scratch.hasScratchedToday ? t("ads.watchToUnlock") : t("discover.scratch.scratchAgain")}
+                    title={t("discover.scratch.scratchAgain")}
                     variant="ghost"
                     onPress={() => scratch.reset()}
                   />

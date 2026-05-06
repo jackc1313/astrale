@@ -34,22 +34,16 @@ export default function HomeScreen() {
   const todayStr = new Date().toISOString().split("T")[0];
   const usage = storageService.getDailyUsage(todayStr);
 
-  // Stars always free
+  // All sections unlocked (monetization disabled for launch)
   const starsUnlocked = true;
 
-  // One section free: love if user selected it, otherwise first interest
-  const interests = profile?.interests ?? [];
-  const freeSection: HoroscopeSection =
-    interests.includes("love") ? "love" :
-    (interests[0] as HoroscopeSection | undefined) ?? "love";
-
-  const [unlockedSections, setUnlockedSections] = useState<Record<HoroscopeSection, boolean>>({
-    love: isPremium || freeSection === "love",
-    work: isPremium || freeSection === "work",
-    health: isPremium || freeSection === "health",
-    luck: isPremium || freeSection === "luck",
+  const [unlockedSections] = useState<Record<HoroscopeSection, boolean>>({
+    love: true,
+    work: true,
+    health: true,
+    luck: true,
   });
-  const [affinityUnlocked, setAffinityUnlocked] = useState(isPremium);
+  const [affinityUnlocked] = useState(true);
 
   const handleUnlockSection = async (section: HoroscopeSection) => {
     const rewarded = await showAd();

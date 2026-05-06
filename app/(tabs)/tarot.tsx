@@ -45,21 +45,10 @@ export default function TarotScreen() {
     return () => clearInterval(interval);
   }, [alreadyDrawnToday]);
 
-  const [unlockedModes, setUnlockedModes] = useState<TarotMode[]>(
-    isPremium ? ["daily", "three_card", "love"] : ["daily", "three_card"]
-  );
+  // All modes unlocked (monetization disabled for launch)
+  const lockedModes: TarotMode[] = [];
 
-  const handleUnlockMode = async (m: TarotMode) => {
-    const rewarded = await showAd();
-    if (rewarded) {
-      setUnlockedModes((prev) => [...prev, m]);
-      setMode(m);
-    }
-  };
-
-  const lockedModes = isPremium ? [] : (["love"] as TarotMode[]).filter(
-    (m) => !unlockedModes.includes(m)
-  );
+  const handleUnlockMode = (_m: TarotMode) => {};
 
   const handleSelectCard = (_card: TarotCard) => {
     drawCards();

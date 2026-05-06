@@ -88,8 +88,6 @@ export default function ProfileScreen() {
 
         <NotificationSettings settings={settings} onUpdate={updateSettings} />
 
-        {!isPremium && <PremiumBanner />}
-
         <Pressable onPress={handleLogout} style={styles.logoutButton}>
           <Body style={styles.logoutText}>Esci e ricomincia</Body>
         </Pressable>
