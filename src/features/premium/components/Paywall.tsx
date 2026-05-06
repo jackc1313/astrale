@@ -1,6 +1,8 @@
 import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import { ScreenContainer, Title, Body, Card } from '@shared/components';
 import { colors, radius, spacing } from '@shared/theme';
 import { usePremium } from '@services/premium';
@@ -10,11 +12,11 @@ type PaywallProps = {
 };
 
 const BENEFITS = [
-  { key: 'premium.benefit1', icon: '\u2609' },
-  { key: 'premium.benefit2', icon: '\u2721' },
-  { key: 'premium.benefit3', icon: '\u2728' },
-  { key: 'premium.benefit4', icon: '\uD83D\uDCC5' },
-  { key: 'premium.benefit5', icon: '\u26D4' },
+  { key: 'premium.benefit1', icon: 'star-four-points-outline' },
+  { key: 'premium.benefit2', icon: 'cards-outline' },
+  { key: 'premium.benefit3', icon: 'compass-outline' },
+  { key: 'premium.benefit4', icon: 'calendar-outline' },
+  { key: 'premium.benefit5', icon: 'close-circle-outline' },
 ];
 
 export const Paywall = ({ onClose }: PaywallProps) => {
@@ -37,14 +39,14 @@ export const Paywall = ({ onClose }: PaywallProps) => {
   return (
     <ScreenContainer>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Body style={styles.starIcon}>{'\u2B50'}</Body>
+        <MaterialCommunityIcons name="star-four-points" size={48} color={colors.gold} style={styles.starIcon} />
         <Title style={styles.title}>{t('premium.title')}</Title>
         <Body style={styles.subtitle}>{t('premium.subtitle')}</Body>
 
         <View style={styles.benefits}>
           {BENEFITS.map((b) => (
             <View key={b.key} style={styles.benefitRow}>
-              <Body style={styles.benefitIcon}>{b.icon}</Body>
+              <MaterialCommunityIcons name={b.icon as any} size={20} color={colors.gold} />
               <Body style={styles.benefitText}>{t(b.key)}</Body>
             </View>
           ))}
@@ -86,7 +88,7 @@ export const Paywall = ({ onClose }: PaywallProps) => {
 const styles = StyleSheet.create({
   scroll: { padding: spacing.xl, alignItems: 'center', gap: spacing.lg, paddingBottom: spacing['5xl'] },
   starIcon: { fontSize: 48, marginTop: spacing['3xl'] },
-  title: { fontSize: 28, textAlign: 'center' },
+  title: { fontSize: 28, lineHeight: 38, textAlign: 'center' },
   subtitle: { fontSize: 14, opacity: 0.6, textAlign: 'center' },
   benefits: { gap: spacing.md, width: '100%', marginTop: spacing.lg },
   benefitRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
