@@ -1,5 +1,6 @@
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { Body } from "@shared/components";
 import { colors, radius } from "@shared/theme";
@@ -28,7 +29,7 @@ export const TarotCard = ({ card, side, width = 140, height = 220 }: TarotCardPr
   return (
     <LinearGradient colors={["#2a1838", colors.deepPurple, "#0d0d0d"]} style={[styles.card, { width, height }]}>
       <Body style={styles.roman}>{getRomanNumeral(card.number)}</Body>
-      <Body style={styles.symbol}>{card.symbol}</Body>
+      <MaterialCommunityIcons name={card.icon as any} size={Math.round(width * 0.5)} color={colors.gold} />
     </LinearGradient>
   );
 };
@@ -39,7 +40,6 @@ const styles = StyleSheet.create({
     alignItems: "center", justifyContent: "center", overflow: "hidden",
   },
   roman: { fontFamily: "PlayfairDisplay-Bold", fontSize: 14, color: colors.gold, position: "absolute", top: 12 },
-  symbol: { fontSize: 40, color: colors.gold },
   backIcon: { width: "60%", height: "60%" },
   backLabel: { fontFamily: "PlayfairDisplay-Bold", fontSize: 8, color: colors.gold, opacity: 0.4, letterSpacing: 4, marginTop: 4 },
 });

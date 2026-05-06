@@ -4,7 +4,7 @@ export type TarotCard = {
   nameKey: string;
   uprightKey: string;
   reversedKey: string;
-  symbol: string;
+  icon: string;
 };
 
 export type TarotMode = "daily" | "three_card" | "love";
