@@ -12,11 +12,12 @@ const appIcon = require("../../../../assets/icon_golden_only.png");
 type TarotCardProps = {
   card: TarotCardType;
   side: "front" | "back";
+  reversed?: boolean;
   width?: number;
   height?: number;
 };
 
-export const TarotCard = ({ card, side, width = 140, height = 220 }: TarotCardProps) => {
+export const TarotCard = ({ card, side, reversed = false, width = 140, height = 220 }: TarotCardProps) => {
   if (side === "back") {
     return (
       <LinearGradient colors={[colors.deepPurple, "#2a1838"]} style={[styles.card, { width, height }]}>
@@ -27,7 +28,10 @@ export const TarotCard = ({ card, side, width = 140, height = 220 }: TarotCardPr
   }
 
   return (
-    <LinearGradient colors={["#2a1838", colors.deepPurple, "#0d0d0d"]} style={[styles.card, { width, height }]}>
+    <LinearGradient
+      colors={["#2a1838", colors.deepPurple, "#0d0d0d"]}
+      style={[styles.card, { width, height }, reversed && { transform: [{ rotate: "180deg" }] }]}
+    >
       <Body style={styles.roman}>{getRomanNumeral(card.number)}</Body>
       <MaterialCommunityIcons name={card.icon as any} size={Math.round(width * 0.5)} color={colors.gold} />
     </LinearGradient>

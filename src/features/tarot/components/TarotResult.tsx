@@ -34,6 +34,7 @@ export const TarotResult = ({ drawnCards, interpretation, mode, countdown, onRed
               <TarotCard
                 card={drawn.card}
                 side="front"
+                reversed={drawn.orientation === "reversed"}
                 width={mode === "daily" ? 160 : 100}
                 height={mode === "daily" ? 250 : 156}
               />
