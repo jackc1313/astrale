@@ -72,6 +72,7 @@ export default function TarotScreen() {
             interpretation={interpretation}
             mode={mode}
             countdown={mode === "daily" && alreadyDrawnToday ? countdown : undefined}
+            onRedraw={mode !== "daily" ? reset : undefined}
           />
         ) : (
           <View style={styles.fanSection}>
@@ -83,9 +84,6 @@ export default function TarotScreen() {
           </View>
         )}
 
-        {isDrawn && !alreadyDrawnToday && (
-          <Button title={t("common.back")} variant="ghost" onPress={reset} style={styles.resetButton} />
-        )}
       </View>
       {!isPremium && (
         <View style={styles.bannerContainer}>

@@ -2,7 +2,7 @@ import { StyleSheet, View, ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
-import { Body, Title, Card } from "@shared/components";
+import { Body, Title, Card, Button } from "@shared/components";
 import { colors, spacing } from "@shared/theme";
 import type { DrawnCard, TarotInterpretation, TarotMode } from "../types";
 import { TarotCard } from "./TarotCard";
@@ -12,6 +12,7 @@ type TarotResultProps = {
   interpretation: TarotInterpretation | null;
   mode: TarotMode;
   countdown?: string;
+  onRedraw?: () => void;
 };
 
 const THREE_CARD_LABELS: Record<string, string[]> = {
@@ -19,7 +20,7 @@ const THREE_CARD_LABELS: Record<string, string[]> = {
   love: ["tarot.you", "tarot.partner", "tarot.relationship"],
 };
 
-export const TarotResult = ({ drawnCards, interpretation, mode, countdown }: TarotResultProps) => {
+export const TarotResult = ({ drawnCards, interpretation, mode, countdown, onRedraw }: TarotResultProps) => {
   const { t } = useTranslation();
   const labels = THREE_CARD_LABELS[mode];
 
@@ -65,6 +66,10 @@ export const TarotResult = ({ drawnCards, interpretation, mode, countdown }: Tar
             <Body style={styles.countdownTime}>{countdown}</Body>
           </View>
         )}
+
+        {onRedraw && (
+          <Button title="Pesca di nuovo" variant="ghost" onPress={onRedraw} style={styles.redrawButton} />
+        )}
       </ScrollView>
     </Animated.View>
   );
@@ -85,4 +90,5 @@ const styles = StyleSheet.create({
   countdownContainer: { alignItems: "center", gap: spacing.xs, marginTop: spacing.xl },
   countdownLabel: { fontSize: 12, opacity: 0.5 },
   countdownTime: { fontSize: 24, fontFamily: "PlayfairDisplay-Bold", color: colors.gold },
+  redrawButton: { marginTop: spacing.lg },
 });
