@@ -10,28 +10,29 @@ import type {
 } from "../types";
 import { majorArcana } from "../data/majorArcana";
 
-const TODAY_DRAW_KEY = "tarot.todayDraw";
+const DRAW_KEY_PREFIX = "tarot.draw";
 const today = (): string => new Date().toISOString().split("T")[0];
 
 type SavedDraw = {
   date: string;
-  cardId: string;
-  orientation: CardOrientation;
+  cards: { cardId: string; orientation: CardOrientation }[];
   interpretation?: TarotInterpretation;
 };
 
-const loadSavedDraw = (): { cards: DrawnCard[]; drawn: boolean; interpretation: TarotInterpretation | null } => {
-  const saved = storage.getString(TODAY_DRAW_KEY);
+const drawKey = (mode: TarotMode): string => `${DRAW_KEY_PREFIX}.${mode}`;
+
+const loadSavedDraw = (mode: TarotMode): { cards: DrawnCard[]; drawn: boolean; interpretation: TarotInterpretation | null } => {
+  const saved = storage.getString(drawKey(mode));
   if (saved) {
     const parsed = JSON.parse(saved) as SavedDraw;
     if (parsed.date === today()) {
-      const card = majorArcana.find((c) => c.id === parsed.cardId);
-      if (card) {
-        return {
-          cards: [{ card, orientation: parsed.orientation }],
-          drawn: true,
-          interpretation: parsed.interpretation ?? null,
-        };
+      const cards: DrawnCard[] = [];
+      for (const entry of parsed.cards) {
+        const card = majorArcana.find((c) => c.id === entry.cardId);
+        if (card) cards.push({ card, orientation: entry.orientation });
+      }
+      if (cards.length > 0) {
+        return { cards, drawn: true, interpretation: parsed.interpretation ?? null };
       }
     }
   }
@@ -39,19 +40,25 @@ const loadSavedDraw = (): { cards: DrawnCard[]; drawn: boolean; interpretation: 
 };
 
 export const useTarot = () => {
-  const savedDraw = loadSavedDraw();
   const [mode, setMode] = useState<TarotMode>("daily");
-  const [drawnCards, setDrawnCards] = useState<DrawnCard[]>(savedDraw.cards);
-  const [interpretation, setInterpretation] = useState<TarotInterpretation | null>(savedDraw.interpretation);
+  const initialDraw = loadSavedDraw("daily");
+  const [drawnCards, setDrawnCards] = useState<DrawnCard[]>(initialDraw.cards);
+  const [interpretation, setInterpretation] = useState<TarotInterpretation | null>(initialDraw.interpretation);
   const [isDrawn, setIsDrawn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [alreadyDrawnToday, setAlreadyDrawnToday] = useState(savedDraw.drawn);
+  const [alreadyDrawnToday, setAlreadyDrawnToday] = useState(initialDraw.drawn);
 
   useEffect(() => {
-    if (savedDraw.drawn && savedDraw.cards.length > 0) {
-      fetchInterpretation(savedDraw.cards[0].card.id);
+    const saved = loadSavedDraw(mode);
+    setDrawnCards(saved.cards);
+    setInterpretation(saved.interpretation);
+    setIsDrawn(false);
+    setAlreadyDrawnToday(saved.drawn);
+
+    if (saved.drawn && saved.cards.length > 0) {
+      fetchInterpretation(saved.cards[0].card.id);
     }
-  }, []);
+  }, [mode]);
 
   const fetchInterpretation = async (cardId: string) => {
     const profile = storageService.getUserProfile();
@@ -72,11 +79,11 @@ export const useTarot = () => {
         };
         setInterpretation(interp);
 
-        const saved = storage.getString(TODAY_DRAW_KEY);
+        const saved = storage.getString(drawKey(mode));
         if (saved) {
           const parsed = JSON.parse(saved) as SavedDraw;
           parsed.interpretation = interp;
-          storage.set(TODAY_DRAW_KEY, JSON.stringify(parsed));
+          storage.set(drawKey(mode), JSON.stringify(parsed));
         }
       }
     } catch (err) {
@@ -89,7 +96,7 @@ export const useTarot = () => {
   };
 
   const drawCards = useCallback(() => {
-    if (mode === "daily" && alreadyDrawnToday) return;
+    if (alreadyDrawnToday) return;
 
     setIsLoading(true);
     const count = mode === "daily" ? 1 : 3;
@@ -105,21 +112,17 @@ export const useTarot = () => {
     setIsDrawn(true);
     setIsLoading(false);
 
-    if (mode === "daily") {
-      const first = drawn[0];
-      const savedDraw: SavedDraw = {
-        date: today(),
-        cardId: first.card.id,
-        orientation: first.orientation,
-      };
-      storage.set(TODAY_DRAW_KEY, JSON.stringify(savedDraw));
+    const savedDraw: SavedDraw = {
+      date: today(),
+      cards: drawn.map((d) => ({ cardId: d.card.id, orientation: d.orientation })),
+    };
+    storage.set(drawKey(mode), JSON.stringify(savedDraw));
 
-      const todayStr = today();
-      const usage = storageService.getDailyUsage(todayStr);
-      storageService.setDailyUsage({ ...usage, tarotCardDrawn: true });
+    const todayStr = today();
+    const usage = storageService.getDailyUsage(todayStr);
+    storageService.setDailyUsage({ ...usage, tarotCardDrawn: true });
 
-      setAlreadyDrawnToday(true);
-    }
+    setAlreadyDrawnToday(true);
 
     drawn.forEach((d) => {
       storageService.addCollectedCard(d.card.id);
@@ -130,9 +133,10 @@ export const useTarot = () => {
   }, [mode, alreadyDrawnToday]);
 
   const reset = () => {
-    const saved = loadSavedDraw();
+    const saved = loadSavedDraw(mode);
     setDrawnCards(saved.drawn ? saved.cards : []);
     setInterpretation(saved.interpretation);
+    setAlreadyDrawnToday(saved.drawn);
     setIsDrawn(false);
   };
 

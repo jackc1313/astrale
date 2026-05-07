@@ -38,7 +38,11 @@ export default function TarotScreen() {
   const [countdown, setCountdown] = useState(getTimeUntilMidnight());
 
   useEffect(() => {
-    if (!alreadyDrawnToday) return;
+    if (!alreadyDrawnToday) {
+      setCountdown(getTimeUntilMidnight());
+      return;
+    }
+    setCountdown(getTimeUntilMidnight());
     const interval = setInterval(() => {
       setCountdown(getTimeUntilMidnight());
     }, 60000);
@@ -54,7 +58,7 @@ export default function TarotScreen() {
     drawCards();
   };
 
-  const showResult = isDrawn || (mode === "daily" && alreadyDrawnToday && drawnCards.length > 0);
+  const showResult = isDrawn || (alreadyDrawnToday && drawnCards.length > 0);
 
   return (
     <ScreenContainer edges={["top"]}>
@@ -71,15 +75,14 @@ export default function TarotScreen() {
             drawnCards={drawnCards}
             interpretation={interpretation}
             mode={mode}
-            countdown={mode === "daily" && alreadyDrawnToday ? countdown : undefined}
-            onRedraw={mode !== "daily" ? reset : undefined}
+            countdown={alreadyDrawnToday ? countdown : undefined}
           />
         ) : (
           <View style={styles.fanSection}>
             <Body style={styles.instruction}>{t("tarot.drawCard")}</Body>
             <TarotFan
               onSelect={handleSelectCard}
-              disabled={mode === "daily" && alreadyDrawnToday}
+              disabled={alreadyDrawnToday}
             />
           </View>
         )}
