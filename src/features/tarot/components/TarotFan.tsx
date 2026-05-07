@@ -15,8 +15,8 @@ import { majorArcana } from "../data/majorArcana";
 import { TarotCard } from "./TarotCard";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const CARD_WIDTH = 80;
-const CARD_HEIGHT = 125;
+const CARD_WIDTH = 160;
+const CARD_HEIGHT = 250;
 const FAN_RADIUS = SCREEN_WIDTH * 0.9;
 const ANGLE_SPREAD = 3;
 const TOTAL_ANGLE = ANGLE_SPREAD * (majorArcana.length - 1);
@@ -140,14 +140,14 @@ const AnimatedFanCard = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 280,
+    height: 460,
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
   },
   fanCenter: {
     width: SCREEN_WIDTH,
-    height: 250,
+    height: 430,
     justifyContent: "center",
     alignItems: "center",
   },
