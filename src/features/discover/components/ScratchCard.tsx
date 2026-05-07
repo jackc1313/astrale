@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Canvas, Path, Skia, Rect, Group, Circle, Line } from "@shopify/react-native-skia";
@@ -57,7 +57,13 @@ export const ScratchCard = ({ stone, onReveal }: ScratchCardProps) => {
   const totalCells = useRef(Math.ceil((CARD_WIDTH * CARD_HEIGHT) / (CELL_SIZE * CELL_SIZE)));
   const touchedCells = useRef(new Set<string>());
   const [, forceUpdate] = useState(0);
+  const [contentVisible, setContentVisible] = useState(false);
   const overlayOpacity = useSharedValue(1);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setContentVisible(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const animatedOverlayStyle = useAnimatedStyle(() => ({
     opacity: overlayOpacity.value,
@@ -133,7 +139,7 @@ export const ScratchCard = ({ stone, onReveal }: ScratchCardProps) => {
 
   return (
     <View style={styles.cardContainer}>
-      <View style={styles.contentLayer}>
+      <View style={[styles.contentLayer, !contentVisible && { opacity: 0 }]}>
         {stoneContent}
       </View>
 
