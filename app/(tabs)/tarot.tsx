@@ -85,11 +85,6 @@ export default function TarotScreen() {
         )}
 
       </View>
-      {!isPremium && (
-        <View style={styles.bannerContainer}>
-          <BannerAd unitId={TestIds.ADAPTIVE_BANNER} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
-        </View>
-      )}
     </ScreenContainer>
   );
 }

@@ -6,11 +6,49 @@ Questa guida documenta la configurazione di monetizzazione completa dell'app, at
 
 ## Stato attuale (lancio)
 
-- Banner footer: ATTIVI (Home, Tarocchi, Scopri)
+- Banner footer: DISATTIVATI (zero pubblicita')
 - Rewarded ads: DISATTIVATI (tutto sbloccato)
 - Interstitial ads: DISATTIVATI
 - Premium/Paywall: NASCOSTI
 - RevenueCat: codice presente ma non attivo
+
+NOTA: In Italia, monetizzare un'app richiede partita IVA e contributi INPS (~4500 EUR/anno)
+anche a ricavo zero. Per questo motivo l'app viene lanciata senza alcuna monetizzazione.
+
+---
+
+## Come riattivare i banner footer
+
+I banner AdMob vanno aggiunti in 3 schermate. In ciascuna, aggiungere prima del tag di chiusura
+`</ScreenContainer>`:
+
+```tsx
+import { BannerAd, BannerAdSize, TestIds } from "react-native-google-mobile-ads";
+
+// Dentro il return, subito prima di </ScreenContainer>:
+{!isPremium && (
+  <View style={styles.bannerContainer}>
+    <BannerAd
+      unitId={process.env.EXPO_PUBLIC_ADMOB_BANNER_ID ?? TestIds.ADAPTIVE_BANNER}
+      size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+    />
+  </View>
+)}
+```
+
+E aggiungere lo stile: `bannerContainer: { alignItems: "center" }`
+
+File da modificare:
+- `app/(tabs)/index.tsx` (Home)
+- `app/(tabs)/tarot.tsx` (Tarocchi)
+- `app/(tabs)/discover.tsx` (Scopri)
+
+Assicurarsi che il `ScreenContainer` usi `edges={["top"]}` per non avere margine sotto il banner.
+
+Prerequisiti:
+- Account AdMob configurato (vedi GUIDA-LANCIO.md punto 9)
+- Ad unit IDs reali nel file .env
+- Partita IVA e iscrizione INPS gestione separata
 
 ---
 

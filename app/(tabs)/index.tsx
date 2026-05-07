@@ -152,11 +152,6 @@ export default function HomeScreen() {
         )}
 
       </ScrollView>
-      {!isPremium && (
-        <View style={styles.bannerContainer}>
-          <BannerAd unitId={TestIds.ADAPTIVE_BANNER} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
-        </View>
-      )}
     </ScreenContainer>
   );
 }
