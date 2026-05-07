@@ -1,1 +1,1 @@
-export { useTarot } from "./useTarot";
+export { useTarot, loadSavedDraw } from "./useTarot";

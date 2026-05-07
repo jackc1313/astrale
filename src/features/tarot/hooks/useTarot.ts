@@ -21,7 +21,7 @@ type SavedDraw = {
 
 const drawKey = (mode: TarotMode): string => `${DRAW_KEY_PREFIX}.${mode}`;
 
-const loadSavedDraw = (mode: TarotMode): { cards: DrawnCard[]; drawn: boolean; interpretation: TarotInterpretation | null } => {
+export const loadSavedDraw = (mode: TarotMode): { cards: DrawnCard[]; drawn: boolean; interpretation: TarotInterpretation | null } => {
   const saved = storage.getString(drawKey(mode));
   if (saved) {
     const parsed = JSON.parse(saved) as SavedDraw;
