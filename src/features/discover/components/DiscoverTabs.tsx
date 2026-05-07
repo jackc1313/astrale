@@ -16,6 +16,7 @@ export const DiscoverTabs = ({ selected, onSelect }: DiscoverTabsProps) => {
   const tabs: { id: DiscoverTab; label: string }[] = [
     { id: "wheel", label: t("discover.wheel.title") },
     { id: "scratch", label: t("discover.scratch.title") },
+    { id: "stars", label: t("discover.stars.title") },
   ];
 
   return (
@@ -39,6 +40,6 @@ const styles = StyleSheet.create({
   container: { flexDirection: "row", backgroundColor: colors.whiteOverlay, borderRadius: radius.md, padding: 3, gap: 3 },
   tab: { flex: 1, paddingVertical: spacing.sm, alignItems: "center", borderRadius: radius.sm },
   tabActive: { backgroundColor: colors.goldMuted, borderWidth: 1, borderColor: colors.goldBorder },
-  label: { fontSize: 13, color: colors.whiteDim, fontFamily: "Inter-Medium" },
+  label: { fontSize: 11, color: colors.whiteDim, fontFamily: "Inter-Medium" },
   labelActive: { color: colors.gold },
 });

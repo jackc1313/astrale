@@ -1,4 +1,4 @@
-export type DiscoverTab = "wheel" | "scratch";
+export type DiscoverTab = "wheel" | "scratch" | "stars";
 
 export type WheelItem = {
   index: number;

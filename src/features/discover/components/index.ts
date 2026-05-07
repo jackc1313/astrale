@@ -5,3 +5,7 @@ export { WheelResult } from "./WheelResult";
 export { ScratchCard } from "./ScratchCard";
 export { ScratchSelector } from "./ScratchSelector";
 export { ParticleBurst } from "./ParticleBurst";
+export { StarCategories } from "./StarCategories";
+export { StarQuestions } from "./StarQuestions";
+export { ConstellationReveal } from "./ConstellationReveal";
+export { StarAnswer } from "./StarAnswer";

@@ -221,6 +221,34 @@
       "scratchIt": "Gratta per scoprire",
       "scratchAgain": "Gratta ancora",
       "alreadyScratched": "Hai gia' grattato oggi"
+    },
+    "stars": {
+      "title": "Chiedilo alle Stelle",
+      "chooseCategory": "Cosa vuoi chiedere alle stelle?",
+      "chooseQuestion": "Scegli la tua domanda",
+      "alreadyAsked": "Hai gia' chiesto oggi",
+      "askAgain": "Chiedi un'altra cosa",
+      "backToCategories": "Cambia argomento",
+      "nextQuestion": "Prossima domanda tra",
+      "thinking": "Le stelle stanno rispondendo..."
+    }
+  },
+  "stars": {
+    "categories": {
+      "love": "Amore",
+      "work": "Lavoro",
+      "friendship": "Amicizia"
+    },
+    "questions": {
+      "love1": "Cosa dicono le stelle sul mio cuore oggi?",
+      "love2": "Arrivera' una sorpresa in amore?",
+      "love3": "Come posso migliorare la mia vita sentimentale?",
+      "work1": "Quali opportunita' mi riservano le stelle?",
+      "work2": "E' il momento giusto per osare sul lavoro?",
+      "work3": "Come posso sbloccare la mia carriera?",
+      "friend1": "Cosa dicono le stelle sulle mie amicizie?",
+      "friend2": "Arrivera' una nuova amicizia importante?",
+      "friend3": "Come posso rafforzare i miei legami?"
     }
   }
 }

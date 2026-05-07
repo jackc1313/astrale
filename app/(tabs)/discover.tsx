@@ -7,7 +7,7 @@ import { spacing } from "@shared/theme";
 import { useRewardedAd } from "@services/ads";
 import { usePremium } from '@services/premium';
 import { BannerAd, BannerAdSize, TestIds } from "react-native-google-mobile-ads";
-import { useWheel, useScratch } from "@features/discover/hooks";
+import { useWheel, useScratch, useStars } from "@features/discover/hooks";
 import {
   DiscoverTabs,
   FortuneWheel,
@@ -16,6 +16,10 @@ import {
   ScratchCard,
   ScratchSelector,
   ParticleBurst,
+  StarCategories,
+  StarQuestions,
+  ConstellationReveal,
+  StarAnswer,
 } from "@features/discover/components";
 import type { DiscoverTab } from "@features/discover/types";
 
@@ -27,6 +31,7 @@ export default function DiscoverScreen() {
 
   const wheel = useWheel();
   const scratch = useScratch();
+  const stars = useStars();
 
   // No ad gates (monetization disabled for launch)
   const handleSpinPress = () => {
@@ -42,7 +47,7 @@ export default function DiscoverScreen() {
       <View style={styles.container}>
         <DiscoverTabs selected={activeTab} onSelect={setActiveTab} />
 
-        {activeTab === "wheel" ? (
+        {activeTab === "wheel" && (
           <View style={styles.wheelContent}>
             <View style={styles.wheelWrapper}>
               <ParticleBurst visible={!!wheel.result} />
@@ -73,7 +78,9 @@ export default function DiscoverScreen() {
               />
             )}
           </View>
-        ) : (
+        )}
+
+        {activeTab === "scratch" && (
           <ScrollView
             contentContainerStyle={styles.scratchContent}
             showsVerticalScrollIndicator={false}
@@ -104,6 +111,56 @@ export default function DiscoverScreen() {
             )}
           </ScrollView>
         )}
+
+        {activeTab === "stars" && (
+          <ScrollView
+            contentContainerStyle={styles.starsContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {stars.phase === "categories" && (
+              <>
+                <Body style={styles.instruction}>{t("discover.stars.chooseCategory")}</Body>
+                <StarCategories
+                  categories={stars.categories}
+                  onSelect={stars.selectCategory}
+                />
+              </>
+            )}
+
+            {stars.phase === "questions" && stars.selectedCategory && (
+              <>
+                <Body style={styles.instruction}>{t("discover.stars.chooseQuestion")}</Body>
+                <StarQuestions
+                  questions={stars.questionsForCategory(stars.selectedCategory)}
+                  isAsked={stars.isAsked}
+                  onSelect={stars.selectQuestion}
+                  onBack={stars.backToCategories}
+                />
+              </>
+            )}
+
+            {stars.phase === "thinking" && (
+              <ConstellationReveal
+                sign={stars.sign}
+                onComplete={stars.showAnswer}
+              />
+            )}
+
+            {stars.phase === "answer" && stars.response && stars.selectedQuestion && (
+              <>
+                <StarAnswer
+                  response={stars.response}
+                  questionText={t(stars.selectedQuestion.textKey)}
+                />
+                <Button
+                  title={t("discover.stars.askAgain")}
+                  variant="ghost"
+                  onPress={stars.backToQuestions}
+                />
+              </>
+            )}
+          </ScrollView>
+        )}
       </View>
     </ScreenContainer>
   );
@@ -116,6 +173,6 @@ const styles = StyleSheet.create({
   wheelWrapper: { alignItems: "center", position: "relative" },
   scratchContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"], flexGrow: 1 },
   scratchCardWrapper: { flex: 1, alignItems: "center", justifyContent: "center", gap: spacing.lg },
+  starsContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"], flexGrow: 1 },
   instruction: { fontSize: 14, opacity: 0.5 },
-  bannerContainer: { alignItems: "center" },
 });
