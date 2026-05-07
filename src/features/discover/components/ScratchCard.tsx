@@ -3,7 +3,7 @@ import { StyleSheet, View, Dimensions } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Canvas, Path, Skia, Rect, Group, Circle, Line } from "@shopify/react-native-skia";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, { runOnJS, useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
+import Animated, { runOnJS, useSharedValue, useAnimatedStyle, withTiming, Easing, ReduceMotion } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
 
 import { Body, Label } from "@shared/components";
@@ -72,7 +72,7 @@ export const ScratchCard = ({ stone, onReveal }: ScratchCardProps) => {
   const checkReveal = () => {
     const coverage = touchedCells.current.size / totalCells.current;
     if (coverage >= REVEAL_THRESHOLD && !revealed) {
-      overlayOpacity.value = withTiming(0, { duration: 600 }, (finished) => {
+      overlayOpacity.value = withTiming(0, { duration: 1200, easing: Easing.out(Easing.cubic), reduceMotion: ReduceMotion.Never }, (finished) => {
         if (finished) {
           runOnJS(setRevealed)(true);
         }
