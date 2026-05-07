@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
 
-import { ScreenContainer, Body, Button } from "@shared/components";
+import { ScreenContainer, Title, Body, Button } from "@shared/components";
 import { spacing } from "@shared/theme";
 import { useRewardedAd } from "@services/ads";
 import { usePremium } from '@services/premium';
@@ -49,6 +49,7 @@ export default function DiscoverScreen() {
 
         {activeTab === "wheel" && (
           <View style={styles.wheelContent}>
+            <Title style={styles.sectionTitle}>{t("discover.wheel.fullTitle")}</Title>
             <View style={styles.wheelWrapper}>
               <ParticleBurst visible={!!wheel.result} />
               <WheelIndicator />
@@ -87,6 +88,7 @@ export default function DiscoverScreen() {
           >
             {scratch.selectedIndex === null ? (
               <>
+                <Title style={styles.sectionTitle}>{t("discover.scratch.fullTitle")}</Title>
                 <Body style={styles.instruction}>{t("discover.scratch.choose")}</Body>
                 <ScratchSelector
                   count={3}
@@ -119,6 +121,7 @@ export default function DiscoverScreen() {
           >
             {stars.phase === "categories" && (
               <>
+                <Title style={styles.sectionTitle}>{t("discover.stars.fullTitle")}</Title>
                 <Body style={styles.instruction}>{t("discover.stars.chooseCategory")}</Body>
                 <StarCategories
                   categories={stars.categories}
@@ -174,5 +177,6 @@ const styles = StyleSheet.create({
   scratchContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"], flexGrow: 1 },
   scratchCardWrapper: { flex: 1, alignItems: "center", justifyContent: "center", gap: spacing.lg },
   starsContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"], flexGrow: 1 },
+  sectionTitle: { fontSize: 20, textAlign: "center" },
   instruction: { fontSize: 14, opacity: 0.5 },
 });

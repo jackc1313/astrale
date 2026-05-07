@@ -209,21 +209,24 @@
   },
   "discover": {
     "wheel": {
-      "title": "Ruota della Fortuna",
+      "title": "Ruota",
+      "fullTitle": "Ruota della Fortuna",
       "spin": "Gira la ruota",
       "spinAgain": "Gira ancora",
       "unlockSpin": "Guarda un video per girare",
       "alreadySpun": "Hai gia' girato oggi"
     },
     "scratch": {
-      "title": "Gratta e Scopri",
+      "title": "Gratta",
+      "fullTitle": "Gratta e Scopri",
       "choose": "Scegli una carta",
       "scratchIt": "Gratta per scoprire",
       "scratchAgain": "Gratta ancora",
       "alreadyScratched": "Hai gia' grattato oggi"
     },
     "stars": {
-      "title": "Chiedilo alle Stelle",
+      "title": "Stelle",
+      "fullTitle": "Chiedilo alle Stelle",
       "chooseCategory": "Cosa vuoi chiedere alle stelle?",
       "chooseQuestion": "Scegli la tua domanda",
       "alreadyAsked": "Hai gia' chiesto oggi",

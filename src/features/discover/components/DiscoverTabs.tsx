@@ -27,7 +27,7 @@ export const DiscoverTabs = ({ selected, onSelect }: DiscoverTabsProps) => {
           onPress={() => onSelect(tab.id)}
           style={[styles.tab, selected === tab.id && styles.tabActive]}
         >
-          <Body style={[styles.label, selected === tab.id && styles.labelActive]}>
+          <Body style={[styles.label, selected === tab.id && styles.labelActive]} numberOfLines={1}>
             {tab.label}
           </Body>
         </Pressable>
