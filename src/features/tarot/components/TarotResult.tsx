@@ -37,7 +37,7 @@ export const TarotResult = ({ drawnCards, interpretation, mode, countdown }: Tar
                 width={mode === "daily" ? 160 : 100}
                 height={mode === "daily" ? 250 : 156}
               />
-              <Body style={styles.cardName}>{t(drawn.card.nameKey)}</Body>
+              <Body style={styles.cardName} numberOfLines={1}>{t(drawn.card.nameKey)}</Body>
               <Body style={styles.orientation}>
                 {t(drawn.orientation === "upright" ? "tarot.upright" : "tarot.reversed")}
               </Body>
@@ -75,7 +75,7 @@ export const TarotResult = ({ drawnCards, interpretation, mode, countdown }: Tar
 const styles = StyleSheet.create({
   scroll: { gap: spacing.lg, paddingBottom: spacing["5xl"] },
   cardsRow: { flexDirection: "row", justifyContent: "center", gap: spacing.md, marginTop: spacing.lg },
-  cardWrapper: { alignItems: "center", gap: spacing.xs },
+  cardWrapper: { flex: 1, alignItems: "center", gap: spacing.xs },
   cardLabel: { fontSize: 11, color: colors.gold, fontFamily: "Inter-SemiBold", textTransform: "uppercase", letterSpacing: 1, marginBottom: spacing.xs },
   cardName: { fontFamily: "PlayfairDisplay-Bold", fontSize: 13, color: colors.pearlWhite, marginTop: spacing.xs },
   orientation: { fontSize: 10, color: colors.gold, opacity: 0.7 },
