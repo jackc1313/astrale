@@ -14,7 +14,7 @@ const CARD_WIDTH = Dimensions.get("window").width - 80;
 const CARD_HEIGHT = 200;
 const STROKE_WIDTH = 28;
 const CELL_SIZE = 18;
-const REVEAL_THRESHOLD = 0.7;
+const REVEAL_THRESHOLD = 0.25;
 
 type ScratchCardProps = {
   stone: StoneReading;
