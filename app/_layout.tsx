@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ReduceMotion } from 'react-native-reanimated';
 
 import { storageService } from '@services/storage';
 import { initPremium } from '@services/premium';

@@ -43,10 +43,7 @@ export default function DiscoverScreen() {
         <DiscoverTabs selected={activeTab} onSelect={setActiveTab} />
 
         {activeTab === "wheel" ? (
-          <ScrollView
-            contentContainerStyle={styles.wheelContent}
-            showsVerticalScrollIndicator={false}
-          >
+          <View style={styles.wheelContent}>
             <View style={styles.wheelWrapper}>
               <ParticleBurst visible={!!wheel.result} />
               <WheelIndicator />
@@ -60,7 +57,14 @@ export default function DiscoverScreen() {
             </View>
 
             {wheel.result ? (
-              <WheelResult result={wheel.result} />
+              <ScrollView showsVerticalScrollIndicator={false} style={styles.resultScroll}>
+                <WheelResult result={wheel.result} />
+                <Button
+                  title={t("discover.wheel.spinAgain")}
+                  onPress={wheel.reset}
+                  variant="ghost"
+                />
+              </ScrollView>
             ) : (
               <Button
                 title={t("discover.wheel.spin")}
@@ -68,15 +72,7 @@ export default function DiscoverScreen() {
                 disabled={wheel.isSpinning || wheel.isLoading}
               />
             )}
-
-            {wheel.result && (
-              <Button
-                title={t("discover.wheel.spinAgain")}
-                onPress={wheel.reset}
-                variant="ghost"
-              />
-            )}
-          </ScrollView>
+          </View>
         ) : (
           <ScrollView
             contentContainerStyle={styles.scratchContent}
@@ -115,7 +111,8 @@ export default function DiscoverScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl, paddingTop: spacing.lg, gap: spacing.lg },
-  wheelContent: { alignItems: "center", gap: spacing.xl, paddingTop: spacing.lg, paddingBottom: spacing["5xl"] },
+  wheelContent: { flex: 1, alignItems: "center", gap: spacing.xl, paddingTop: spacing.lg },
+  resultScroll: { flex: 1, width: "100%" },
   wheelWrapper: { alignItems: "center", position: "relative" },
   scratchContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"], flexGrow: 1 },
   scratchCardWrapper: { flex: 1, alignItems: "center", justifyContent: "center", gap: spacing.lg },

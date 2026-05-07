@@ -6,6 +6,7 @@ import Animated, {
   useAnimatedStyle,
   withDecay,
   runOnJS,
+  ReduceMotion,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
@@ -86,7 +87,14 @@ export const FortuneWheel = ({
   const rotation = useSharedValue(0);
   const sparkleData = useRef(generateSparkles());
 
+  const isGestureSpin = useRef(false);
+
+  const setGestureFlag = useCallback((value: boolean) => {
+    isGestureSpin.current = value;
+  }, []);
+
   const handleSpinEnd = useCallback((finalAngle: number) => {
+    isGestureSpin.current = false;
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     onSpinEnd(finalAngle);
   }, [onSpinEnd]);
@@ -99,6 +107,7 @@ export const FortuneWheel = ({
       {
         velocity: randomVelocity,
         deceleration: 0.9997,
+        reduceMotion: ReduceMotion.Never,
       },
       (finished) => {
         if (finished) {
@@ -110,7 +119,7 @@ export const FortuneWheel = ({
   }, [handleSpinEnd]);
 
   useEffect(() => {
-    if (spinning) {
+    if (spinning && !isGestureSpin.current) {
       triggerSpin();
     }
   }, [spinning]);
@@ -118,7 +127,7 @@ export const FortuneWheel = ({
   const flingGesture = Gesture.Pan()
     .enabled(!disabled && !spinning)
     .onStart(() => {
-      runOnJS(onSpinStart)();
+      runOnJS(setGestureFlag)(true);
       runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Medium);
     })
     .onEnd((e) => {
@@ -132,6 +141,7 @@ export const FortuneWheel = ({
         {
           velocity: boostedVelocity,
           deceleration: 0.9997,
+          reduceMotion: ReduceMotion.Never,
         },
         (finished) => {
           if (finished) {
@@ -140,6 +150,8 @@ export const FortuneWheel = ({
           }
         }
       );
+
+      runOnJS(onSpinStart)();
     });
 
   const animatedWheelStyle = useAnimatedStyle(() => ({

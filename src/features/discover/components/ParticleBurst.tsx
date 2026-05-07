@@ -6,7 +6,7 @@ import Animated, {
   withTiming,
   withDelay,
   Easing,
-  runOnJS,
+  ReduceMotion,
 } from "react-native-reanimated";
 
 import { colors } from "@shared/theme";
@@ -47,7 +47,7 @@ const AnimatedParticle = ({ particle, trigger }: { particle: Particle; trigger: 
       progress.value = 0;
       progress.value = withDelay(
         particle.delay,
-        withTiming(1, { duration: 800, easing: Easing.out(Easing.cubic) })
+        withTiming(1, { duration: 800, easing: Easing.out(Easing.cubic), reduceMotion: ReduceMotion.Never })
       );
     }
   }, [trigger]);
