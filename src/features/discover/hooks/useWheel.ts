@@ -153,8 +153,12 @@ export const useWheel = () => {
     setIsSpinning(true);
   };
 
+  const reset = () => {
+    setResult(null);
+  };
+
   return {
     items, result, isSpinning, isLoading, hasSpunToday,
-    startSpin, selectResult,
+    startSpin, selectResult, reset,
   };
 };

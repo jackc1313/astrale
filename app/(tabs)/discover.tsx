@@ -15,6 +15,7 @@ import {
   WheelResult,
   ScratchCard,
   ScratchSelector,
+  ParticleBurst,
 } from "@features/discover/components";
 import type { DiscoverTab } from "@features/discover/types";
 
@@ -47,6 +48,7 @@ export default function DiscoverScreen() {
             showsVerticalScrollIndicator={false}
           >
             <View style={styles.wheelWrapper}>
+              <ParticleBurst visible={!!wheel.result} />
               <WheelIndicator />
               <FortuneWheel
                 items={wheel.items}
@@ -70,7 +72,7 @@ export default function DiscoverScreen() {
             {wheel.result && (
               <Button
                 title={t("discover.wheel.spinAgain")}
-                onPress={handleSpinPress}
+                onPress={wheel.reset}
                 variant="ghost"
               />
             )}

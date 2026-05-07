@@ -4,3 +4,4 @@ export { WheelIndicator } from "./WheelIndicator";
 export { WheelResult } from "./WheelResult";
 export { ScratchCard } from "./ScratchCard";
 export { ScratchSelector } from "./ScratchSelector";
+export { ParticleBurst } from "./ParticleBurst";
