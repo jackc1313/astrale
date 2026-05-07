@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +46,9 @@ export default function NotificationsScreen() {
   return (
     <ScreenContainer>
       <View style={styles.container}>
+        <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.pearlWhite} />
+        </Pressable>
         <ProgressBar steps={4} currentStep={4} />
         <View style={styles.content}>
           <MaterialCommunityIcons name="bell-outline" size={56} color={colors.gold} style={styles.bellIcon} />
@@ -65,6 +68,7 @@ export default function NotificationsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl },
+  backButton: { marginBottom: spacing.sm },
   content: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md },
   bellIcon: { fontSize: 56, marginBottom: spacing.xl, lineHeight: 70 },
   title: { fontSize: 24, textAlign: 'center' },

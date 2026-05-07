@@ -1,9 +1,10 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ScreenContainer, Title, Body, Button, ProgressBar } from '@shared/components';
-import { spacing } from '@shared/theme';
+import { colors, spacing } from '@shared/theme';
 import { InterestCard } from '@features/onboarding/components';
 import type { InterestId } from '@features/onboarding/types';
 import { useOnboardingContext } from './_layout';
@@ -23,6 +24,9 @@ export default function InterestsScreen() {
   return (
     <ScreenContainer>
       <View style={styles.container}>
+        <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.pearlWhite} />
+        </Pressable>
         <ProgressBar steps={4} currentStep={3} />
         <View style={styles.header}>
           <Title style={styles.headerTitle}>{t('onboarding.interests.title')}</Title>
@@ -54,6 +58,7 @@ export default function InterestsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl },
+  backButton: { marginBottom: spacing.sm },
   header: { marginTop: spacing['4xl'], gap: spacing.sm },
   headerTitle: { fontSize: 24, lineHeight: 34 },
   subtitle: { opacity: 0.6, fontSize: 14 },
