@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.goldMuted, borderWidth: 1, borderColor: colors.goldBorder,
     alignItems: "center", justifyContent: "center", gap: spacing.sm,
   },
-  questionMark: { fontFamily: "PlayfairDisplay-Bold", fontSize: 36, color: colors.gold },
+  questionMark: { fontFamily: "PlayfairDisplay-Bold", fontSize: 36, lineHeight: 42, color: colors.gold },
   label: { fontSize: 12, color: colors.whiteDim },
 });
