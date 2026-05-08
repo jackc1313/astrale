@@ -174,9 +174,9 @@ const styles = StyleSheet.create({
   wheelContent: { flex: 1, alignItems: "center", gap: spacing.xl, paddingTop: spacing.lg },
   resultScroll: { flex: 1, width: "100%" },
   wheelWrapper: { alignItems: "center", position: "relative" },
-  scratchContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"], flexGrow: 1 },
+  scratchContent: { alignItems: "center", gap: spacing.xl, paddingTop: spacing.lg, paddingBottom: spacing["5xl"], flexGrow: 1 },
   scratchCardWrapper: { flex: 1, alignItems: "center", justifyContent: "center", gap: spacing.lg },
-  starsContent: { alignItems: "center", gap: spacing.xl, paddingBottom: spacing["5xl"], flexGrow: 1 },
+  starsContent: { alignItems: "center", gap: spacing.xl, paddingTop: spacing.lg, paddingBottom: spacing["5xl"], flexGrow: 1 },
   sectionTitle: { fontSize: 20, textAlign: "center" },
   instruction: { fontSize: 14, opacity: 0.5 },
 });
