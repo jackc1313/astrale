@@ -38,7 +38,7 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash",
+  model: "gemini-2.0-flash",
   generationConfig: { responseMimeType: "application/json", temperature: 0.9 },
 });
 
@@ -58,10 +58,12 @@ const SIGN_NAMES = {
   sagittarius: "Sagittario", capricorn: "Capricorno", aquarius: "Acquario", pisces: "Pesci",
 };
 
-const getNextSevenDays = () => {
+const DAYS_AHEAD = parseInt(process.env.DAYS_AHEAD ?? "2", 10);
+
+const getUpcomingDays = () => {
   const dates = [];
   const today = new Date();
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < DAYS_AHEAD; i++) {
     const d = new Date(today);
     d.setDate(d.getDate() + i);
     dates.push(d.toISOString().split("T")[0]);
@@ -205,7 +207,7 @@ async function generateDailyContent(dates) {
 }
 
 async function main() {
-  const dates = getNextSevenDays();
+  const dates = getUpcomingDays();
   console.log(`\nGenerating content for: ${dates.join(", ")}\n`);
 
   console.log("=== Horoscopes ===");
