@@ -1,0 +1,30 @@
+name: Generate Weekly Content
+
+on:
+  schedule:
+    # Every Sunday at 3:00 AM Rome time (1:00 AM UTC in winter, 1:00 AM UTC in summer)
+    - cron: '0 1 * * 0'
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install @google/generative-ai firebase-admin
+
+      - name: Generate weekly content
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: node scripts/generate-weekly-content.js
