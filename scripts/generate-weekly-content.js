@@ -69,14 +69,16 @@ const getNextSevenDays = () => {
   return dates;
 };
 
-async function generateJSON(prompt, retries = 2) {
+async function generateJSON(prompt, retries = 3) {
   for (let i = 0; i < retries; i++) {
     try {
       const result = await model.generateContent(prompt);
       return JSON.parse(result.response.text());
     } catch (err) {
-      console.warn(`  Retry ${i + 1}/${retries}: ${err.message?.slice(0, 80)}`);
-      await delay(5000 * (i + 1));
+      const isRateLimit = err.message?.includes("429") || err.message?.includes("quota") || err.message?.includes("Resource has been exhausted");
+      const waitTime = isRateLimit ? 60000 : 10000 * (i + 1);
+      console.warn(`  Retry ${i + 1}/${retries} (wait ${waitTime / 1000}s): ${err.message?.slice(0, 100)}`);
+      await delay(waitTime);
     }
   }
   throw new Error("Failed after retries");
@@ -164,7 +166,7 @@ async function generateHoroscopes(dates) {
         await db.doc(`horoscopes/${date}/signs/${sign}`).set(data);
         console.log(`  OK ${date}/${sign}`);
         generated++;
-        await delay(2000);
+        await delay(5000);
       } catch (err) {
         console.error(`  FAILED ${date}/${sign}: ${err.message}`);
         failed++;
@@ -216,8 +218,16 @@ async function main() {
   console.log(`Horoscopes - Generated: ${horoscopes.generated}, Failed: ${horoscopes.failed}`);
   console.log(`Daily Content - Generated: ${daily.generated}, Failed: ${daily.failed}`);
 
-  if (horoscopes.failed > 0 || daily.failed > 0) {
+  const totalFailed = horoscopes.failed + daily.failed;
+  const totalGenerated = horoscopes.generated + daily.generated;
+
+  if (totalGenerated === 0 && totalFailed > 0) {
+    console.error("All generations failed!");
     process.exit(1);
+  }
+
+  if (totalFailed > 0) {
+    console.warn(`${totalFailed} items failed - will be retried on next run`);
   }
 
   process.exit(0);
