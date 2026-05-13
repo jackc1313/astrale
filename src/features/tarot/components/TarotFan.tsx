@@ -6,6 +6,8 @@ import Animated, {
   withSpring,
   interpolate,
   Extrapolation,
+  FadeOut,
+  ReduceMotion,
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
@@ -67,11 +69,11 @@ export const TarotFan = ({ onSelect, disabled = false }: TarotFanProps) => {
 
   return (
     <GestureDetector gesture={panGesture}>
-      <View style={styles.container}>
+      <Animated.View exiting={FadeOut.duration(500).reduceMotion(ReduceMotion.Never)} style={styles.container}>
         <View style={styles.fanCenter}>
           {majorArcana.map((card, i) => renderCard(card, i))}
         </View>
-      </View>
+      </Animated.View>
     </GestureDetector>
   );
 };

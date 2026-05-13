@@ -1,6 +1,6 @@
 import { StyleSheet, View, ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, { FadeInDown, ReduceMotion } from "react-native-reanimated";
 
 import { Body, Title, Card } from "@shared/components";
 import { colors, spacing } from "@shared/theme";
@@ -24,7 +24,7 @@ export const TarotResult = ({ drawnCards, interpretation, mode, countdown }: Tar
   const labels = THREE_CARD_LABELS[mode];
 
   return (
-    <Animated.View entering={FadeInDown.duration(600).delay(300)}>
+    <Animated.View entering={FadeInDown.duration(800).delay(600).reduceMotion(ReduceMotion.Never)}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
         <View style={styles.cardsRow}>
           {drawnCards.map((drawn, i) => (
