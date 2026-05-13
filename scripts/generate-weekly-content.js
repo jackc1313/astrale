@@ -69,14 +69,14 @@ const getNextSevenDays = () => {
   return dates;
 };
 
-async function generateJSON(prompt, retries = 3) {
+async function generateJSON(prompt, retries = 2) {
   for (let i = 0; i < retries; i++) {
     try {
       const result = await model.generateContent(prompt);
       return JSON.parse(result.response.text());
     } catch (err) {
       console.warn(`  Retry ${i + 1}/${retries}: ${err.message?.slice(0, 80)}`);
-      await delay(15000 * (i + 1));
+      await delay(5000 * (i + 1));
     }
   }
   throw new Error("Failed after retries");
@@ -164,7 +164,7 @@ async function generateHoroscopes(dates) {
         await db.doc(`horoscopes/${date}/signs/${sign}`).set(data);
         console.log(`  OK ${date}/${sign}`);
         generated++;
-        await delay(4500);
+        await delay(2000);
       } catch (err) {
         console.error(`  FAILED ${date}/${sign}: ${err.message}`);
         failed++;
